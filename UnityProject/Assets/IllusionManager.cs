@@ -6,6 +6,10 @@ using float3 = Unity.Mathematics.float3;
 
 public class IllusionManager : MonoBehaviour
 {
+    private int LAYER_CUTABLE = 12;
+    private int LAYER_ZOOMABLE = 13;
+    int targetMask = 1 << 12 | 1 << 13;
+
     [Header("DebugVariables")]
     public Transform target;            // The target object we picked up for scaling
     public float fieldOfView;
@@ -20,10 +24,8 @@ public class IllusionManager : MonoBehaviour
     public bool EnableCameraClippingPlaneShift;
     // public Transform door;
 
-
- 
     [Header("Parameters")]
-    public LayerMask targetMask;        // The layer mask used to hit only potential targets with a raycast
+    // public LayerMask targetMask;        // The layer mask used to hit only potential targets with a raycast
     // public LayerMask ignoreTargetMask;  // The layer mask used to ignore the player and target objects while raycasting
     public float holdDistance;          // The offset amount for positioning the object so it doesn't clip into walls
     public float FOVSensitivity;
@@ -51,65 +53,23 @@ public class IllusionManager : MonoBehaviour
 
     void Update()
     {
-        if (outline != null) {
-            // disable outline
-            outline.enabled = false;
-        }
-        RaycastHit hit;
-        if (target == null)
-        {
-            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask))
-            {
-                // check if hit object is in layer targetable
-                if (hit.collider.gameObject.layer == 10) {
-                    // add outline to the object
-                    outline = hit.collider.GetComponent<Outline>();
-                    if (outline != null) {
-                        outline.enabled = true;
-                    }
-                }
-            }
-        }
         HandleInput();
+        UpdateOutLine();
+        
         if (target != null)
         {
-            // holding the object in front of the player 
-
-            // target.position = transform.position + transform.forward * holdDistance; //* targetScale.x;
-
-            if(EnableCameraClippingPlaneShift)
-            {
-                target.position = transform.parent.transform.position +  transform.parent.transform.up * 3 + 
-                                transform.forward * holdDistance; //* targetScale.x;
+            target.position = transform.position + transform.forward * holdDistance;
+            if (target.gameObject.layer == LAYER_ZOOMABLE)
+            {   
+                DeformTarget();
             }
-            else
-            {
-                target.position = transform.position + transform.forward * holdDistance;
-            }
-           
-            // get the parent's transform position
-
-            // originalScale = target.localScale.x;originalScale * CurrLatticeFrontRatio;
-
-            // target.localScale = new Vector3(
-            //     originalScale * CurrLatticeFrontRatio, 
-            //     originalScale * CurrLatticeFrontRatio, 
-            //     originalScale * CurrLatticeFrontRatio);
-
-            // making the object always facing the player
-            // target.LookAt(transform.position);
-            DeformTarget();
-            // change the target's scale
-            // target.localScale *= CurrLatticeBackRatio;
         }
-        // // slide door to right during 1 second
-        // door.position = Vector3.Lerp(door.position, new Vector3(0, 0, 0), Time.deltaTime);
-        // // slide door to left during 1 second
-        // door.position = Vector3.Lerp(door.position, new Vector3(0, 0, 0), Time.deltaTime);
-
-        // Vector3 p = playerCamera.ViewportToWorldPoint(new Vector3(1, 1, playerCamera.nearClipPlane));
-        // Gizmos.color = Color.yellow;
-        // Gizmos.DrawSphere(p, 0.1F);
+        
+        // else if (target != null && target.gameObject.layer == LAYER_CUTABLE)
+        // {
+        //     CutTarget();
+        // }
+       
     }
 
     private Transform LatticeTrans;
@@ -138,95 +98,53 @@ public class IllusionManager : MonoBehaviour
     // FTL = latticeDeformer.ControlPoints[7];
     
     // depth of object Lattice
+    bool deformInited = false;
 
-    void HandleInput()
-    {
-        // Check for left mouse click
-        if (Input.GetMouseButtonDown(0))
+    void UpdateOutLine(){
+        if (outline != null) {
+            // disable outline
+            outline.enabled = false;
+        }
+        RaycastHit hit;
+        if (target == null)
         {
-            // If we do not currently have a target
-            if (target == null)
+            // send raycast on two layers
+
+            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask))
             {
-                // Fire a raycast with the layer mask that only hits potential targets
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask))
-                {
-                    // Set our target variable to be the Transform object we hit with our raycast
-                    target = hit.transform;
- 
-                    // Disable physics for the object
-                    target.GetComponent<Rigidbody>().isKinematic = true;
-
-                    // set the target rotation to be 0,0,0
-                    target.rotation = Quaternion.Euler(0,0,0);
- 
-                    // Calculate the distance between the playerCamera and the object
-                    originalDistance = Vector3.Distance(transform.position, target.position);
- 
-                    // Save the original scale of the object into our originalScale Vector3 variabble
-                    originalScale = target.localScale.x;
- 
-                    // Set our target scale to be the same as the original for the time being
-                    // targetScale = target.localScale;
-
-                    LatticeTrans = target.GetChild(0);
-                    LatticeObj = LatticeTrans.gameObject;
-                    // // get the Vector3Int resolution of the Lattice
-                    // Vector3Int resolution = Lattice.GetComponent<Lattice>().resolution;
-                    // // print the resolution
-                    // print(Lattice.Resolution);
-                    if(LatticeObj != null)
-                    {
-                        // cube_script = cube.GetComponent<CubeScript>();
-                        latticeDeformer = LatticeObj.GetComponent<LatticeDeformer>();
-                        // assign the float3[] ControlPoints to F0, F1, F2, F3, B0, B1, B2, B3
-                        FTL = latticeDeformer.ControlPoints[7];
-                        FTR = latticeDeformer.ControlPoints[6];
-                        FBR = latticeDeformer.ControlPoints[4];
-                        FBL = latticeDeformer.ControlPoints[5];
-
-                        BTL = latticeDeformer.ControlPoints[3];
-                        BTR = latticeDeformer.ControlPoints[2];
-                        BBR = latticeDeformer.ControlPoints[0];
-                        BBL = latticeDeformer.ControlPoints[1];
-
-                        // get the distance between FTL and BTL
-                        float distanceBetweenFTLAndBTL = Vector3.Distance(FTL, BTL);
-                        // get the distance between the playerCamera and the object's front lattice face
-                        distLatticeFront = holdDistance - distanceBetweenFTLAndBTL/2;
-                        // get the distance between the playerCamera and the object's back lattice face
-                        distLatticeBack = holdDistance + distanceBetweenFTLAndBTL/2;
-
-                        minFrustumHeightAtDistLatticeFront = 2.0f * distLatticeFront * Mathf.Tan(minPOV * 0.5f * Mathf.Deg2Rad);
-                        minFrustumHeightAtDistLatticeBack = 2.0f * distLatticeBack * Mathf.Tan(minPOV * 0.5f * Mathf.Deg2Rad);
+                // check if hit object is in layer targetable
+                if (hit.collider.gameObject.layer == LAYER_ZOOMABLE || hit.collider.gameObject.layer == LAYER_CUTABLE) {
+                    // add outline to the object
+                    outline = hit.collider.GetComponent<Outline>();
+                    if (outline != null) {
+                        outline.enabled = true;
                     }
                 }
             }
-            // If we DO have a target
-            else
+        }
+    }
+
+    void HandleInput()
+    {
+        if (Input.GetMouseButtonDown(0)) // left mouse click
+        {
+            if (target == null)
             {
-                // Reactivate physics for the target object
-                // check if the target is cube
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask))
+                {
+                    target = hit.transform;
+                    target.GetComponent<Rigidbody>().isKinematic = true;
+                }
+            }
+            else // If we DO have a target
+            {
                 if(target.name != "Cube")
                 {
                     target.GetComponent<Rigidbody>().isKinematic = false;
                 }
- 
-                // Set our target variable to null
-                
-                // OrigfrustumHeightAtDistLatticeFront = 0;
-                // OrigfrustumHeightAtDistLatticeBack = 0;
-
-                // target.GetComponent<MeshCollider>().mesh = null;
-                // get the mesh of mesh collider of the target
-                // MeshFilter meshFilter = target.GetComponent<MeshFilter>();
-                // get the mesh from mesh renderer of the target
-                // Mesh mesh = target.GetComponent<MeshFilter>().mesh;
-                // assign the mesh of mesh collider of the target to be the mesh of the target
-                // target.GetComponent<MeshCollider>().sharedMesh = meshFilter.mesh;
-                // target.GetComponent<MeshCollider>().sharedMesh = meshFilter.mesh;
-
                 target = null;
+                deformInited = false;
             }
         }
 
@@ -248,8 +166,6 @@ public class IllusionManager : MonoBehaviour
         if(EnableCameraClippingPlaneShift)
         {
            // camera move back
-            
-            
             playerCamera.nearClipPlane = CPSensitivity*(1-viewChangePersentage)+0.01f;
             // shift z position of playerCamera
             playerCamera.transform.localPosition = new Vector3(
@@ -258,21 +174,66 @@ public class IllusionManager : MonoBehaviour
                 -(playerCamera.nearClipPlane)
             );
         }
-
-        
-
-
     }
 
     float currFrustumHeightAtDistLatticeFront;
     float currFrustumHeightAtDistLatticeBack;
+    
 
     void DeformTarget()
     {
+        if(!deformInited){
+            // set the target rotation to be 0,0,0
+            target.rotation = Quaternion.Euler(0,0,0);
+
+            // Calculate the distance between the playerCamera and the object
+            originalDistance = Vector3.Distance(transform.position, target.position);
+
+            // Save the original scale of the object into our originalScale Vector3 variabble
+            originalScale = target.localScale.x;
+
+            // Set our target scale to be the same as the original for the time being
+            // targetScale = target.localScale;
+
+            LatticeTrans = target.GetChild(0);
+            LatticeObj = LatticeTrans.gameObject;
+            // // get the Vector3Int resolution of the Lattice
+            // Vector3Int resolution = Lattice.GetComponent<Lattice>().resolution;
+            // // print the resolution
+            // print(Lattice.Resolution);
+            if(LatticeObj != null)
+            {
+                // cube_script = cube.GetComponent<CubeScript>();
+                latticeDeformer = LatticeObj.GetComponent<LatticeDeformer>();
+                // assign the float3[] ControlPoints to F0, F1, F2, F3, B0, B1, B2, B3
+                FTL = latticeDeformer.ControlPoints[7];
+                FTR = latticeDeformer.ControlPoints[6];
+                FBR = latticeDeformer.ControlPoints[4];
+                FBL = latticeDeformer.ControlPoints[5];
+
+                BTL = latticeDeformer.ControlPoints[3];
+                BTR = latticeDeformer.ControlPoints[2];
+                BBR = latticeDeformer.ControlPoints[0];
+                BBL = latticeDeformer.ControlPoints[1];
+
+                // get the distance between FTL and BTL
+                float distanceBetweenFTLAndBTL = Vector3.Distance(FTL, BTL);
+                // get the distance between the playerCamera and the object's front lattice face
+                distLatticeFront = holdDistance - distanceBetweenFTLAndBTL/2;
+                // get the distance between the playerCamera and the object's back lattice face
+                distLatticeBack = holdDistance + distanceBetweenFTLAndBTL/2;
+
+                minFrustumHeightAtDistLatticeFront = 2.0f * distLatticeFront * Mathf.Tan(minPOV * 0.5f * Mathf.Deg2Rad);
+                minFrustumHeightAtDistLatticeBack = 2.0f * distLatticeBack * Mathf.Tan(minPOV * 0.5f * Mathf.Deg2Rad);
+            }
+            deformInited = true;
+        }
+        
+
         // get the child object of the target called "Lattice"
         // get child gameobject of target called "Lattice"
-        LatticeTrans = target.GetChild(0);
-        LatticeObj = LatticeTrans.gameObject;
+        // LatticeTrans = target.GetChild(0);
+        // LatticeObj = LatticeTrans.gameObject;
         // // get the Vector3Int resolution of the Lattice
         // Vector3Int resolution = Lattice.GetComponent<Lattice>().resolution;
         // // print the resolution
@@ -283,7 +244,6 @@ public class IllusionManager : MonoBehaviour
             latticeDeformer = LatticeObj.GetComponent<LatticeDeformer>();
             // print the resolution from the LatticeDeformer script
             LatticeTrans.LookAt(transform.position);
-            
 
             // print(latticeDeformer.Resolution);
             // frustumHeightAtDistance = 2.0f * holdDistance * Mathf.Tan(playerCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);

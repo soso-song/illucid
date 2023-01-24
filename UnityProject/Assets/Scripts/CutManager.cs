@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts;
+// using Thirdparty;
 
 public class CutManager : MonoBehaviour
 {
     // assume N is cutter which is near the camera
+    private int LAYER_CUTABLE = 12;
+    private int LAYER_ZOOMABLE = 13;
     IllusionManager illusionManager;
     
     public GameObject cutterN;
@@ -13,6 +17,9 @@ public class CutManager : MonoBehaviour
     GameObject cutterNR;
     GameObject cutterFL;
     GameObject cutterFR;
+    // create 4 Plane variables
+    // assign them to the 4 planes
+
     // access target variable from IllusionManager.cs
     
     // Start is called before the first frame update
@@ -22,16 +29,22 @@ public class CutManager : MonoBehaviour
         // access target variable from script IllusionManager.cs
         illusionManager = GetComponent<IllusionManager>();
 
-        // cutterNL = cutterN.transform.Find("PivotL").gameObject.transform.Find("Plane").gameObject;
-        // cutterNR = cutterN.transform.Find("PivotR").gameObject.transform.Find("Plane").gameObject;
-        // cutterFL = cutterF.transform.Find("PivotL").gameObject.transform.Find("Plane").gameObject;
-        // cutterFR = cutterF.transform.Find("PivotR").gameObject.transform.Find("Plane").gameObject;
+        // cutterNL = null;
+        // cutterNR = null;
+        // cutterFL = null;
+        // cutterFR = null;
+        // cutterNL = cutterN.transform.Find("PivotL").gameObject.transform.Find("Plane").Plane;
+        // cutterNR = cutterN.transform.Find("PivotR").gameObject.transform.Find("Plane").Plane;
+        // cutterFL = cutterF.transform.Find("PivotL").gameObject.transform.Find("Plane").Plane;
+        // cutterFR = cutterF.transform.Find("PivotR").gameObject.transform.Find("Plane").Plane;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(illusionManager.target != null && cutterNL == null)
+        // check if cutterNL has been assigned
+
+        if(illusionManager.target != null && cutterNR == null)
         {
             cutterNL = cutterN.transform.Find("PivotL").gameObject.transform.Find("Plane").gameObject;
             cutterNR = cutterN.transform.Find("PivotR").gameObject.transform.Find("Plane").gameObject;
@@ -58,9 +71,12 @@ public class CutManager : MonoBehaviour
 
         // }
 
-        if (Input.GetMouseButtonDown(0) && illusionManager.target != null)
+        if (Input.GetMouseButtonDown(0) && illusionManager.target != null && illusionManager.target.gameObject.layer == LAYER_CUTABLE)
         {
-            // print true if 
+            Plane cutterNLPlane = new Plane(cutterNL.transform.up, cutterN.transform.position);
+            GameObject[] slices = Slicer.Slice(cutterNLPlane, illusionManager.target.gameObject);
+            Destroy(illusionManager.target.gameObject);
+            // Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
         }
     }
 }
