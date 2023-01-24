@@ -20,6 +20,9 @@ public class Cutter : MonoBehaviour
         cutterR = GameObject.CreatePrimitive(PrimitiveType.Plane);
         cutterL.GetComponent<Collider>().enabled = false;
         cutterR.GetComponent<Collider>().enabled = false;
+        // not render the cutter
+        cutterL.GetComponent<Renderer>().enabled = false;
+        cutterR.GetComponent<Renderer>().enabled = false;
 
         pivotL.transform.parent = transform;
         pivotR.transform.parent = transform;
@@ -36,6 +39,10 @@ public class Cutter : MonoBehaviour
 
         cutterL.transform.Rotate(90, 0, 0);
         cutterR.transform.Rotate(90, 0, 0);
+
+        // add 0.1f to the width of gameObject
+        transform.localScale += new Vector3(0.01f, 0, 0);
+        // increase the width of mesh collider
     }
 
     // Update is called once per frame
