@@ -18,7 +18,7 @@ public class IllusionManager : MonoBehaviour
     public float CurrLatticeBackRatio;
     public float viewChangePersentage;
     public bool EnableCameraClippingPlaneShift;
-    public Transform door;
+    // public Transform door;
 
 
  
@@ -102,10 +102,10 @@ public class IllusionManager : MonoBehaviour
             // change the target's scale
             // target.localScale *= CurrLatticeBackRatio;
         }
-        // slide door to right during 1 second
-        door.position = Vector3.Lerp(door.position, new Vector3(0, 0, 0), Time.deltaTime);
-        // slide door to left during 1 second
-        door.position = Vector3.Lerp(door.position, new Vector3(0, 0, 0), Time.deltaTime);
+        // // slide door to right during 1 second
+        // door.position = Vector3.Lerp(door.position, new Vector3(0, 0, 0), Time.deltaTime);
+        // // slide door to left during 1 second
+        // door.position = Vector3.Lerp(door.position, new Vector3(0, 0, 0), Time.deltaTime);
 
         // Vector3 p = playerCamera.ViewportToWorldPoint(new Vector3(1, 1, playerCamera.nearClipPlane));
         // Gizmos.color = Color.yellow;
