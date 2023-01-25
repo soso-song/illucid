@@ -233,7 +233,7 @@ public class IllusionManager : MonoBehaviour
             }
             else // If we DO have a target
             {
-                if(target.gameObject.layer == LAYER_ZOOMABLE && target.name != "Cube")
+                if(target.gameObject.layer == LAYER_ZOOMABLE && target.name != "DeformCube")
                 {
                     target.GetComponent<Rigidbody>().isKinematic = false;
                 }
@@ -369,7 +369,7 @@ public class IllusionManager : MonoBehaviour
             float frontDeformRatio = 1+DFSensitivityFront*viewChangePersentage; // view 1->0 then DeformRatio 1->2   //1.4
             float backDeformRatio =  1+DFSensitivityBack*viewChangePersentage;//1-DFSensitivityBack*(viewChangePersentage); // view 1->0 then DeformRatio 1->0.5 //0.82
             
-            if(target.name != "Cube")
+            if(target.name != "DeformCube")
             {
                 DFSensitivityDepth = DFSensitivityDepth/3;
             }
