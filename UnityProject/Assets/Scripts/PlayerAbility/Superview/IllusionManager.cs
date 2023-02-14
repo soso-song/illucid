@@ -7,7 +7,6 @@ using Assets.Scripts; // to access Slicer
 
 public class IllusionManager : MonoBehaviour
 {
-    public Superview Superview;
     private int LAYER_CUTABLE = 12;
     private int LAYER_ZOOMABLE = 13;
     int targetMask = 1 << 12 | 1 << 13;
@@ -24,6 +23,7 @@ public class IllusionManager : MonoBehaviour
     public Outline outline;
 
     [Header("Superview")]
+    public Superview Superview;
     public bool deforming = false;
 
     void Start()
@@ -44,12 +44,11 @@ public class IllusionManager : MonoBehaviour
             {   
                 if (!deforming)
                 {
-                    Superview.InitDeform(target); // make target shape match with FOV
+                    Superview.InitDeform(target); // init lattice deformer
                     deforming = true;
                 }else{
-                    Superview.DeformTarget(target); // make target shape match with FOV
+                    Superview.UpdateDeform(target); // update target shape related to FOV
                 }
-                
             }
         }
         // else if (target != null && target.gameObject.layer == LAYER_CUTABLE)
@@ -99,6 +98,8 @@ public class IllusionManager : MonoBehaviour
                 if(target.gameObject.layer == LAYER_ZOOMABLE)
                 {
                     target.GetComponent<Rigidbody>().isKinematic = false;
+                    // Superview.DetachDeform();
+                    deforming = false;
                 }
 
                 if (target.gameObject.layer == LAYER_CUTABLE)
@@ -106,7 +107,6 @@ public class IllusionManager : MonoBehaviour
                     // CutTarget(); // enable this !
                 }
                 target = null;
-                deforming = false;
             }
         }
 
