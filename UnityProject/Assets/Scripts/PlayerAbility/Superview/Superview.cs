@@ -99,10 +99,10 @@ public class Superview : MonoBehaviour
         float frontDeformRatio = 1+LatticeSensitivityFront*viewChangePersentage; // view 1->0 then DeformRatio 1->2   //1.4
         float backDeformRatio =  1+LatticeSensitivityBack*viewChangePersentage;//1-LatticeSensitivityBack*(viewChangePersentage); // view 1->0 then DeformRatio 1->0.5 //0.82
         
-        if(target.name != "DeformCube")
-        {
-            LatticeSensitivityDepth = LatticeSensitivityDepth/3;
-        }
+        // if(target.name != "DeformCube")
+        // {
+        //     LatticeSensitivityDepth = LatticeSensitivityDepth/3;
+        // }
 
         float depthDeformRatio = 1+LatticeSensitivityDepth*viewChangePersentage;
         // if the target is cube

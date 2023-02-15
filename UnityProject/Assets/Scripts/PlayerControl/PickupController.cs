@@ -47,8 +47,13 @@ public class PickupController : MonoBehaviour
             targetRb.useGravity = false;
             targetRb.drag = 10f;
             // targetRb.constraints = RigidbodyConstraints.FreezeRotationY;
-            targetRb.constraints = RigidbodyConstraints.FreezeRotation;
+            // targetRb.constraints = RigidbodyConstraints.FreezeRotation;
+            // making the targe facing the player
+            // targetRb.transform.LookAt(transform);
+            // make holdArea facing the player
+            
             targetRb.transform.SetParent(holdArea);
+            
         }
     }
 
@@ -56,16 +61,24 @@ public class PickupController : MonoBehaviour
         if(Vector3.Distance(target.transform.position, holdArea.position) > 0.1f){
             targetRb.AddForce((holdArea.position - target.transform.position) * pickupForce);
         }
+        // holdArea.LookAt(transform);
+        // target.transform.rotation = Quaternion.Euler(0, 0, 0);
+        target.transform.LookAt(transform);
     }
 
     public void DropTarget(){
-        // targetRb.isKinematic = true;
+        // this trick removes the cummelative drag force when releasing the object
+        targetRb.isKinematic = true;
+        targetRb.isKinematic = false;
+
         targetRb.useGravity = true;
         targetRb.drag = 1;
         // targetRb.constraints = RigidbodyConstraints.FreezeRotationY;
         targetRb.constraints = RigidbodyConstraints.None;
         targetRb.transform.SetParent(null);
+        
         targetRb = null;
         target = null;
+       
     }
 }
