@@ -26,6 +26,9 @@ public class IllusionManager : MonoBehaviour
     public Superview Superview;
     public bool deforming = false;
 
+    [Header("PickupController")]
+    public PickupController PickupController;
+
     void Start()
     {
         // Cursor.visible = false;
@@ -38,8 +41,8 @@ public class IllusionManager : MonoBehaviour
         HandleInput(); // updates target
         if (target != null)
         {
-            // TODO: HoldTarget();
-            target.position = transform.position + transform.forward * holdDistance;
+            PickupController.MoveTarget(target.transform.gameObject);
+            // HoldTarget();
             if (target.gameObject.layer == LAYER_ZOOMABLE)
             {   
                 if (!deforming)
@@ -56,6 +59,8 @@ public class IllusionManager : MonoBehaviour
         //     CutTarget();
         // }
     }
+
+
     
     void UpdateOutLine(){
         if (outline != null) {
@@ -86,22 +91,22 @@ public class IllusionManager : MonoBehaviour
         {
             if (target == null) // If we dont have a target
             {
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask))
-                {
-                    target = hit.transform;
-                    target.GetComponent<Rigidbody>().isKinematic = true;
+                target = PickupController.RaycastFromCamera(targetMask);
+                if(target){
+                    PickupController.PickupTarget(target.transform.gameObject);
+                    // target.GetComponent<Rigidbody>().isKinematic = true;
                 }
             }
             else // If we DO have a target
             {
+                PickupController.DropTarget(target.transform.gameObject);
+                // target.GetComponent<Rigidbody>().isKinematic = false;
+
                 if(target.gameObject.layer == LAYER_ZOOMABLE)
                 {
-                    target.GetComponent<Rigidbody>().isKinematic = false;
-                    // Superview.DetachDeform();
+                    // Superview.DetachDeform(target);
                     deforming = false;
                 }
-
                 if (target.gameObject.layer == LAYER_CUTABLE)
                 {   
                     // CutTarget(); // enable this !

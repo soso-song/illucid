@@ -81,6 +81,8 @@ public class Superview : MonoBehaviour
         // distLatticeFront = holdDistance - distanceBetweenFTLAndBTL/2;
         // get the distance between the playerCamera and the object's back lattice face
         // distLatticeBack = holdDistance + distanceBetweenFTLAndBTL/2;
+        // disable mesh collider
+        // target.GetComponent<MeshCollider>().enabled = false;
     }
 
     public void UpdateDeform(Transform target)
@@ -151,9 +153,10 @@ public class Superview : MonoBehaviour
         // latticeDeformer.ControlPoints[5] = ;
         // relation of FOV and distance: https://docs.unity3d.com/Manual/FrustumSizeAtDistance.html
     }
-    // public void DetachDeform()
+    // public void DetachDeform(Transform target)
     // {
-        
+    //     // enable mesh collider
+    //     target.GetComponent<MeshCollider>().enabled = true;
     // }
 
     void UpdateFOV()
