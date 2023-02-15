@@ -41,7 +41,6 @@ public class IllusionManager : MonoBehaviour
         HandleInput(); // updates target
         if (target != null)
         {
-            PickupController.MoveTarget(target.transform.gameObject);
             // HoldTarget();
             if (target.gameObject.layer == LAYER_ZOOMABLE)
             {   
@@ -59,8 +58,6 @@ public class IllusionManager : MonoBehaviour
         //     CutTarget();
         // }
     }
-
-
     
     void UpdateOutLine(){
         if (outline != null) {
@@ -99,7 +96,7 @@ public class IllusionManager : MonoBehaviour
             }
             else // If we DO have a target
             {
-                PickupController.DropTarget(target.transform.gameObject);
+                PickupController.DropTarget();
                 // target.GetComponent<Rigidbody>().isKinematic = false;
 
                 if(target.gameObject.layer == LAYER_ZOOMABLE)

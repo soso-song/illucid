@@ -10,9 +10,16 @@ public class PickupController : MonoBehaviour
     private Rigidbody targetRb;
 
     [Header("Physics Parameters")]
-    [SerializeField] private float pickupRange = 15f;
-    [SerializeField] private float pickupForce = 150f;
+    [SerializeField] private float pickupRange = 25f;
+    [SerializeField] private float pickupForce = 0.2f;
 
+
+    void Update(){
+        if (targetRb != null)
+        {
+            MoveTarget();
+        }
+    }
 
     public Transform RaycastFromCamera(int targetMask)
     {
@@ -31,8 +38,9 @@ public class PickupController : MonoBehaviour
         return null;
     }
 
-    public void PickupTarget(GameObject target){
-        targetRb = target.GetComponent<Rigidbody>();
+    public void PickupTarget(GameObject inputTarget){
+        target = inputTarget;
+        targetRb = inputTarget.GetComponent<Rigidbody>();
         if (targetRb)
         {
             // targetRb.isKinematic = true;
@@ -44,14 +52,13 @@ public class PickupController : MonoBehaviour
         }
     }
 
-    public void MoveTarget(GameObject target){
+    public void MoveTarget(){
         if(Vector3.Distance(target.transform.position, holdArea.position) > 0.1f){
             targetRb.AddForce((holdArea.position - target.transform.position) * pickupForce);
         }
     }
 
-    public void DropTarget(GameObject target){
-
+    public void DropTarget(){
         // targetRb.isKinematic = true;
         targetRb.useGravity = true;
         targetRb.drag = 1;
@@ -59,5 +66,6 @@ public class PickupController : MonoBehaviour
         targetRb.constraints = RigidbodyConstraints.None;
         targetRb.transform.SetParent(null);
         targetRb = null;
+        target = null;
     }
 }
