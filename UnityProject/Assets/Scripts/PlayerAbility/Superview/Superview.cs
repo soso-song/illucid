@@ -12,8 +12,8 @@ public class Superview : MonoBehaviour
 
     public float currFOV;
     public float initFOV;
-    public float distLatticeFront;
-    public float distLatticeBack;
+    // public float distLatticeFront;
+    // public float distLatticeBack;
     public float viewChangePersentage;
     // public bool EnableCameraClippingPlaneShift;
     // public Transform door;
@@ -78,9 +78,9 @@ public class Superview : MonoBehaviour
         // get the distance between FTL and BTL
         float distanceBetweenFTLAndBTL = Vector3.Distance(FTL, BTL);
         // get the distance between the playerCamera and the object's front lattice face
-        distLatticeFront = holdDistance - distanceBetweenFTLAndBTL/2;
+        // distLatticeFront = holdDistance - distanceBetweenFTLAndBTL/2;
         // get the distance between the playerCamera and the object's back lattice face
-        distLatticeBack = holdDistance + distanceBetweenFTLAndBTL/2;
+        // distLatticeBack = holdDistance + distanceBetweenFTLAndBTL/2;
     }
 
     public void UpdateDeform(Transform target)
