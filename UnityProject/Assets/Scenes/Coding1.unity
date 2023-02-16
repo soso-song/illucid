@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414726, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731689, g: 0.13414702, b: 0.1210784, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -244,7 +244,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1099056457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17a894ca6171a40eb87184fe54da4dbc, type: 3}
+  m_Script: {fileID: 11500000, guid: ad17b0ec739f942918914ef7a93ebbaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1601547785
@@ -393,9 +393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cb4b973193e4c5ea818f88600a6d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wordOutput: {fileID: 138033674}
-  targetWord: 'A/n '
-  currentWord: 
 --- !u!1 &1727684063
 GameObject:
   m_ObjectHideFlags: 0
