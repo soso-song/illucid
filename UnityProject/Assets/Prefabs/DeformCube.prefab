@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6175747962855977573}
   - component: {fileID: 6175747962855977574}
   m_Layer: 13
-  m_Name: DeformCube (CornSeed)
+  m_Name: DeformCube
   m_TagString: CornSeed
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
