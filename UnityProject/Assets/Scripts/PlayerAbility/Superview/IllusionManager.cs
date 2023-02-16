@@ -114,6 +114,20 @@ public class IllusionManager : MonoBehaviour
 
     }
 
+    public void UpdateTarget(Transform newTarget)
+    {
+        Transform oldTarget = target;
+        deforming = false;
+        if (newTarget != null)
+        {
+            target = newTarget;
+            target.GetComponent<Rigidbody>().isKinematic = true;
+            PickupController.PickupTarget(target.transform.gameObject);
+            
+        }
+        Destroy(oldTarget.gameObject);
+    }
+
 
 
 }
