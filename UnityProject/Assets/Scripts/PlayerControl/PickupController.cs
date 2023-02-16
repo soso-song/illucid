@@ -11,11 +11,11 @@ public class PickupController : MonoBehaviour
 
     [Header("Physics Parameters")]
     [SerializeField] private float pickupRange = 25f;
-    [SerializeField] private float pickupForce = 0.2f; // not sure any effects
+    [SerializeField] private float holdAreaForce = 150f;
     // pickupDrag 10f = funny spring effect and shaking when against object, 30f = not much movement
     [SerializeField] private float pickupDrag = 30f; 
 
-    void Update(){
+    void LateUpdate(){
         if (targetRb != null)
         {
             MoveTarget();
@@ -47,24 +47,31 @@ public class PickupController : MonoBehaviour
             // targetRb.isKinematic = true;
             targetRb.useGravity = false;
             targetRb.drag = pickupDrag;
+            
+            // fix the target shacking after deform
+            targetRb.constraints = RigidbodyConstraints.FreezeRotation;
             // targetRb.constraints = RigidbodyConstraints.FreezeRotationY;
-            // targetRb.constraints = RigidbodyConstraints.FreezeRotation;
-            // making the targe facing the player
-            // targetRb.transform.LookAt(transform);
-            // make holdArea facing the player
+
             targetRb.transform.SetParent(holdArea);
+
+            
         }
     }
-
     public void MoveTarget(){
-        if(Vector3.Distance(target.transform.position, holdArea.position) > 0.1f){
-            targetRb.AddForce((holdArea.position - target.transform.position) * pickupForce);
+        if(Vector3.Distance(target.transform.position, holdArea.position) > 0.01f){
+            targetRb.AddForce(
+                (holdArea.position - target.transform.position) * 
+                holdAreaForce  //* targetRb.mass
+            );
         }
-        // holdArea.LookAt(transform);
-        // target.transform.rotation = Quaternion.Euler(0, 0, 0);
-
-        //possible only cube need to look at player
-        target.transform.LookAt(transform); 
+        // else{
+        //     targetRb.velocity = Vector3.zero;
+        //     targetRb.transform.position = holdArea.position;
+        // }
+        // targetRb.transform.LookAt(transform);
+        
+        // let x rotation be free
+        targetRb.transform.rotation = Quaternion.Euler(0, holdArea.rotation.eulerAngles.y, 0);
     }
 
     public void DropTarget(){

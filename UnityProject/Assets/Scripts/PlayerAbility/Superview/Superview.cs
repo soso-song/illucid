@@ -21,7 +21,7 @@ public class Superview : MonoBehaviour
     [Header("Parameters")]
     // public LayerMask targetMask;        // The layer mask used to hit only potential targets with a raycast
       // The layer mask used to ignore the player and target objects while raycasting
-    public float holdDistance=5;          // The offset amount for positioning the object so it doesn't clip into walls
+    // public float holdDistance=5;          // The offset amount for positioning the object so it doesn't clip into walls
     public float mouseSensitivity=4;
     public float LatticeSensitivity=150, LatticeSensitivityFront=2, LatticeSensitivityBack=4, LatticeSensitivityDepth=9;
     public float minFOV = 30, maxFOV = 110;
@@ -94,7 +94,10 @@ public class Superview : MonoBehaviour
         // cube_script = cube.GetComponent<CubeScript>();
         latticeDeformer = LatticeObj.GetComponent<LatticeDeformer>();
         // print the resolution from the LatticeDeformer script
+
         LatticeTrans.LookAt(transform.position);
+        // set the rotation of the lattice to be zero
+        // LatticeTrans.rotation = Quaternion.Euler(0,0,0);
 
         float frontDeformRatio = 1+LatticeSensitivityFront*viewChangePersentage; // view 1->0 then DeformRatio 1->2   //1.4
         float backDeformRatio =  1+LatticeSensitivityBack*viewChangePersentage;//1-LatticeSensitivityBack*(viewChangePersentage); // view 1->0 then DeformRatio 1->0.5 //0.82
