@@ -11,8 +11,9 @@ public class PickupController : MonoBehaviour
 
     [Header("Physics Parameters")]
     [SerializeField] private float pickupRange = 25f;
-    [SerializeField] private float pickupForce = 0.2f;
-
+    [SerializeField] private float pickupForce = 0.2f; // not sure any effects
+    // pickupDrag 10f = funny spring effect and shaking when against object, 30f = not much movement
+    [SerializeField] private float pickupDrag = 30f; 
 
     void Update(){
         if (targetRb != null)
@@ -45,15 +46,13 @@ public class PickupController : MonoBehaviour
         {
             // targetRb.isKinematic = true;
             targetRb.useGravity = false;
-            targetRb.drag = 10f;
+            targetRb.drag = pickupDrag;
             // targetRb.constraints = RigidbodyConstraints.FreezeRotationY;
             // targetRb.constraints = RigidbodyConstraints.FreezeRotation;
             // making the targe facing the player
             // targetRb.transform.LookAt(transform);
             // make holdArea facing the player
-            
             targetRb.transform.SetParent(holdArea);
-            
         }
     }
 
@@ -63,7 +62,9 @@ public class PickupController : MonoBehaviour
         }
         // holdArea.LookAt(transform);
         // target.transform.rotation = Quaternion.Euler(0, 0, 0);
-        target.transform.LookAt(transform);
+
+        //possible only cube need to look at player
+        target.transform.LookAt(transform); 
     }
 
     public void DropTarget(){
