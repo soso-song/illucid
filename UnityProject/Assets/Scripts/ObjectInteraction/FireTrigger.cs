@@ -5,8 +5,9 @@ using UnityEngine;
 public class FireTrigger : MonoBehaviour
 {
     public IllusionManager IllusionManager;
+    public GameObject PopcornPrefab;
     private GameObject NewTarget;
-    private Vector3 spawnLocation;
+    private Vector3 SpawnLocation;
 
     // Start is called before the first frame update
     void Start()
@@ -14,31 +15,28 @@ public class FireTrigger : MonoBehaviour
         IllusionManager = GameObject.FindObjectOfType<IllusionManager>();
     }
 
-    private void OnTriggerExit(Collider collider)
+    private void OnTriggerExit(Collider other)
     {
-        Debug.Log(collider.gameObject.tag);
-        spawnLocation = collider.gameObject.transform.position;
-
-        if (collider.gameObject.tag == "CornSeed")
+        if (IllusionManager.target != null)
         {
-            Debug.Log("CornSeed entered the fire");
-            SpawnNewTarget("DeformCube");
-            IllusionManager.UpdateTarget(NewTarget.transform);
-        }
-        else if (collider.gameObject.tag == "Popcorn")
-        {
-            // Debug.Log("Popcorn entered the fire");
-            // SpawnNewTarget("DeformSphere");
-            // IllusionManager.UpdateTarget(NewTarget.transform);
-            Debug.Log("Popcorn entered the fire");
-            IllusionManager.UpdateTarget(null);
+             SpawnLocation = IllusionManager.target.gameObject.transform.position;
+            
+            if (IllusionManager.target.gameObject.tag == "CornSeed")
+            {
+                SpawnNewTarget(PopcornPrefab);
+                IllusionManager.UpdateTarget(NewTarget.transform);
+            }
+            else if (IllusionManager.target.gameObject.tag == "Popcorn")
+            {
+                IllusionManager.UpdateTarget(null);
+            }
         }
     }
 
-    private void SpawnNewTarget(string targetName)
+    private void SpawnNewTarget(GameObject target)
     {
-        NewTarget = GameObject.Instantiate(Resources.Load(targetName)) as GameObject;
-        NewTarget.transform.position = spawnLocation;
+        NewTarget = GameObject.Instantiate(target);
+        NewTarget.transform.position = SpawnLocation;
     }
 
 }

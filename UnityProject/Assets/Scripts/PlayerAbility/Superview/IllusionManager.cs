@@ -121,7 +121,7 @@ public class IllusionManager : MonoBehaviour
         if (newTarget != null)
         {
             target = newTarget;
-            target.GetComponent<Rigidbody>().isKinematic = true;
+            // target.GetComponent<Rigidbody>().isKinematic = true;
             PickupController.PickupTarget(target.transform.gameObject);
             
         }
