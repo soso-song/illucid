@@ -62,7 +62,7 @@ public class IllusionManager : MonoBehaviour
     void UpdateOutLine(){
         if (outline != null) {
             // disable outline
-            outline.enabled = false;
+            outline.OutlineWidth = 0;
         }
         RaycastHit hit;
         if (target == null)
@@ -75,7 +75,7 @@ public class IllusionManager : MonoBehaviour
                     // add outline to the object
                     outline = hit.collider.GetComponent<Outline>();
                     if (outline != null) {
-                        outline.enabled = true;
+                        outline.OutlineWidth = 8;
                     }
                 }
             }

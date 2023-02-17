@@ -23,7 +23,7 @@ public class Superview : MonoBehaviour
       // The layer mask used to ignore the player and target objects while raycasting
     // public float holdDistance=5;          // The offset amount for positioning the object so it doesn't clip into walls
     public float mouseSensitivity=4;
-    public float LatticeSensitivity=150, LatticeSensitivityFront=2, LatticeSensitivityBack=4, LatticeSensitivityDepth=9;
+    private float LatticeSensitivity, LatticeSensitivityFront, LatticeSensitivityBack, LatticeSensitivityDepth;
     public float minFOV = 30, maxFOV = 110;
     public bool EnableCameraClippingPlaneShift;
     public float CPSensitivity;
@@ -35,6 +35,8 @@ public class Superview : MonoBehaviour
     private LatticeDeformer latticeDeformer;
 
     public float3 FTL, FTR, FBR, FBL, BTL, BTR, BBR, BBL;
+
+    private TargetController targetController;
     
     void Start()
     {
@@ -83,6 +85,11 @@ public class Superview : MonoBehaviour
         // distLatticeBack = holdDistance + distanceBetweenFTLAndBTL/2;
         // disable mesh collider
         // target.GetComponent<MeshCollider>().enabled = false;
+        targetController = target.GetComponent<TargetController>();
+        LatticeSensitivity = targetController.LatticeSensitivity;
+        LatticeSensitivityFront = targetController.LatticeSensitivityFront;
+        LatticeSensitivityBack = targetController.LatticeSensitivityBack;
+        LatticeSensitivityDepth = targetController.LatticeSensitivityDepth;
     }
 
     public void UpdateDeform(Transform target)
