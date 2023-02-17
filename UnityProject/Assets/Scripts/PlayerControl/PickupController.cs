@@ -24,13 +24,6 @@ public class PickupController : MonoBehaviour
 
     public Transform RaycastFromCamera(int targetMask)
     {
-        // RaycastHit hit;
-        // if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, range, mask))
-        // {
-        //     return hit.transform;
-        // }
-        // return null;
-
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, pickupRange, targetMask))
         {
@@ -53,8 +46,6 @@ public class PickupController : MonoBehaviour
             // targetRb.constraints = RigidbodyConstraints.FreezeRotationY;
 
             targetRb.transform.SetParent(holdArea);
-
-            
         }
     }
     public void MoveTarget(){
@@ -85,8 +76,8 @@ public class PickupController : MonoBehaviour
         targetRb.constraints = RigidbodyConstraints.None;
         targetRb.transform.SetParent(null);
         
+        target.GetComponent<TargetController>().IncrementDrop();
         targetRb = null;
         target = null;
-       
     }
 }
