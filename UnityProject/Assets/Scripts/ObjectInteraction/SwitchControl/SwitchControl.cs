@@ -38,12 +38,12 @@ public class SwitchControl : MonoBehaviour
     }
 
     private void switchOn(){
-        switchAnim.Play("switchOn", 0, 0.0f);
+        // switchAnim.Play("switchOn", 0, 0.0f);
         onSwitchOn.Invoke();
     }
 
     private void switchOff(){
-        switchAnim.Play("switchOff", 0, 0.0f);
+        // switchAnim.Play("switchOff", 0, 0.0f);
         onSwitchOff.Invoke();
     }
 }
