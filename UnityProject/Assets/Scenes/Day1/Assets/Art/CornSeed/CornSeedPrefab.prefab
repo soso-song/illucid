@@ -85,8 +85,8 @@ GameObject:
   - component: {fileID: 8237697242557021445}
   - component: {fileID: 7319396536729772558}
   - component: {fileID: 7319396536729772559}
-  - component: {fileID: 7319396536729772557}
   - component: {fileID: 7961299211543996220}
+  - component: {fileID: 6727198708188530756}
   m_Layer: 13
   m_Name: CornSeedPrefab
   m_TagString: CornSeed
@@ -205,24 +205,6 @@ MonoBehaviour:
   customBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &7319396536729772557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7589358734241750224}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!54 &7961299211543996220
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -239,3 +221,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6727198708188530756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7589358734241750224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54822360b6e5b4ea8987f7106a8690a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickTime: 0
+  maxPickTime: 3
+  LatticeSensitivity: 150
+  LatticeSensitivityFront: 2
+  LatticeSensitivityBack: 4
+  LatticeSensitivityDepth: 9
+  currScale: 1
+  minScale: 0.1
+  maxScale: 4
