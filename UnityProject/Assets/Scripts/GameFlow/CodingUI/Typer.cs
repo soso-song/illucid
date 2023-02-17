@@ -20,7 +20,7 @@ public class Typer : MonoBehaviour
 
     void Start()
     {
-        dirPath = Application.dataPath + "/Code/"+SceneManager.GetActiveScene().name;
+        dirPath = Application.dataPath + "/Sprites/Code/"+SceneManager.GetActiveScene().name;
         GameFlowControl = GameManager.GetComponent<GameFlowControl>();
         LoadImage();
     }
