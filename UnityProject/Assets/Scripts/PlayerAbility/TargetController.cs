@@ -13,6 +13,15 @@ public class TargetController : MonoBehaviour
     public float LatticeSensitivityFront=2;
     public float LatticeSensitivityBack=4;
     public float LatticeSensitivityDepth=9;
+    // public float currScaleFront=1;
+    // public float currScaleBack=1;
+    // public float currScaleDepth=1;
+    // public float maxScaleFront=2;
+    // public float maxScaleBack=4;
+    // public float maxScaleDepth=9;
+    public float currScale=1;
+    public float minScale=0.1f;
+    public float maxScale=4;
 
     void Start()
     {

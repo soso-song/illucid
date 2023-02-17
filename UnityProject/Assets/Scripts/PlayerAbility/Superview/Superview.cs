@@ -36,7 +36,9 @@ public class Superview : MonoBehaviour
 
     public float3 FTL, FTR, FBR, FBL, BTL, BTR, BBR, BBL;
 
+    // private variables from TargetController
     private TargetController targetController;
+    public float targetStartScale, targetCurrScale, targetMinScale, targetMaxScale;
     
     void Start()
     {
@@ -90,16 +92,15 @@ public class Superview : MonoBehaviour
         LatticeSensitivityFront = targetController.LatticeSensitivityFront;
         LatticeSensitivityBack = targetController.LatticeSensitivityBack;
         LatticeSensitivityDepth = targetController.LatticeSensitivityDepth;
+        targetCurrScale = targetController.currScale;
+        targetMinScale = targetController.minScale;
+        targetMaxScale = targetController.maxScale;
+        targetStartScale = targetCurrScale;
     }
 
     public void UpdateDeform(Transform target)
     {
-        if(LatticeObj == null)
-        {
-            Debug.Log("LatticeObj is null, Superview init failed");
-        }
-        // cube_script = cube.GetComponent<CubeScript>();
-        latticeDeformer = LatticeObj.GetComponent<LatticeDeformer>();
+ 
         // print the resolution from the LatticeDeformer script
 
         LatticeTrans.LookAt(transform.position);
@@ -108,14 +109,29 @@ public class Superview : MonoBehaviour
 
         float frontDeformRatio = 1+LatticeSensitivityFront*viewChangePersentage; // view 1->0 then DeformRatio 1->2   //1.4
         float backDeformRatio =  1+LatticeSensitivityBack*viewChangePersentage;//1-LatticeSensitivityBack*(viewChangePersentage); // view 1->0 then DeformRatio 1->0.5 //0.82
-        
-        // if(target.name != "DeformCube")
-        // {
-        //     LatticeSensitivityDepth = LatticeSensitivityDepth/3;
-        // }
-
         float depthDeformRatio = 1+LatticeSensitivityDepth*viewChangePersentage;
+
+        targetCurrScale = frontDeformRatio*targetStartScale;
+
+        // print("frontDeformRatio: "+frontDeformRatio);
         // if the target is cube
+        if(targetCurrScale < targetMinScale && frontDeformRatio < 1)
+        {
+            targetCurrScale = targetMinScale;
+            return;
+        }
+        if(targetCurrScale > targetMaxScale && frontDeformRatio > 1)
+        {
+            targetCurrScale = targetMaxScale;
+            return;
+        }
+        if(LatticeObj == null)
+        {
+            Debug.Log("LatticeObj is null, Superview init failed");
+            return;
+        }
+        // cube_script = cube.GetComponent<CubeScript>();
+        latticeDeformer = LatticeObj.GetComponent<LatticeDeformer>();
 
         latticeDeformer.ControlPoints[7] = new Vector3(
             FTL.x*(frontDeformRatio),
@@ -162,12 +178,15 @@ public class Superview : MonoBehaviour
         // latticeDeformer.ControlPoints[4] = ;
         // latticeDeformer.ControlPoints[5] = ;
         // relation of FOV and distance: https://docs.unity3d.com/Manual/FrustumSizeAtDistance.html
+        // return viewChangePersentage;
+
     }
-    // public void DetachDeform(Transform target)
-    // {
-    //     // enable mesh collider
-    //     target.GetComponent<MeshCollider>().enabled = true;
-    // }
+    public void DetachDeform(Transform target)
+    {
+        // enable mesh collider
+        // target.GetComponent<MeshCollider>().enabled = true;
+        target.GetComponent<TargetController>().currScale = targetCurrScale;
+    }
 
     void UpdateFOV()
     {
