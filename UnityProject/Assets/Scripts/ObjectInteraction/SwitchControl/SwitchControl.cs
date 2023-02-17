@@ -10,8 +10,7 @@ public class SwitchControl : MonoBehaviour
     public AudioSource switchSound;
     public UnityEvent onSwitchOn;
     public UnityEvent onSwitchOff;
-    public Animation switchOnAnime;
-    public Animation switchOffAnime;
+    public Animator switchAnim;
     Outline outline;
 
     // Start is called before the first frame update
@@ -39,12 +38,12 @@ public class SwitchControl : MonoBehaviour
     }
 
     private void switchOn(){
-        switchOnAnime.Play();
+        switchAnim.Play("switchOn", 0, 0.0f);
         onSwitchOn.Invoke();
     }
 
     private void switchOff(){
-        switchOffAnime.Play();
+        switchAnim.Play("switchOff", 0, 0.0f);
         onSwitchOff.Invoke();
     }
 }
