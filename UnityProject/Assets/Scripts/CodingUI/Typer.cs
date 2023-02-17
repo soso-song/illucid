@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +12,8 @@ public class Typer : MonoBehaviour
     public GameObject GameManager;
     GameFlowControl GameFlowControl;
     int count = 0;
+
+    public AudioSource[] SoundFX;
 
     Texture2D tex = null;
     byte[] fileData;
@@ -45,6 +46,8 @@ public class Typer : MonoBehaviour
     private void Update()
     {
         if(Input.anyKeyDown){
+            int index = Random.Range(0, SoundFX.Length);
+            SoundFX[index].Play();
             count++;
             LoadImage();
         }
