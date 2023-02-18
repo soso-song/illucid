@@ -87,7 +87,8 @@ GameObject:
   - component: {fileID: 6601958296177013428}
   - component: {fileID: 4990762491289767237}
   - component: {fileID: -6618318060126037046}
-  m_Layer: 13
+  - component: {fileID: -4175737518240947974}
+  m_Layer: 12
   m_Name: PopcornPrefab
   m_TagString: Popcorn
   m_Icon: {fileID: 0}
@@ -169,7 +170,7 @@ MeshCollider:
   m_GameObject: {fileID: 7210831722095939852}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -242,3 +243,16 @@ MonoBehaviour:
   currScale: 1
   minScale: 0.1
   maxScale: 4
+--- !u!135 &-4175737518240947974
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7210831722095939852}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 0, z: 0}
