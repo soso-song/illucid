@@ -32,6 +32,7 @@ public class Superview : MonoBehaviour
 
     private Transform LatticeTrans;
     private GameObject LatticeObj;
+    private Deformable deformable;
     private LatticeDeformer latticeDeformer;
 
     public float3 FTL, FTR, FBR, FBL, BTL, BTR, BBR, BBL;
@@ -186,6 +187,10 @@ public class Superview : MonoBehaviour
         // enable mesh collider
         // target.GetComponent<MeshCollider>().enabled = true;
         target.GetComponent<TargetController>().currScale = targetCurrScale;
+        deformable = target.GetComponent<Deformable>();
+        deformable.RecalculateMeshCollider();
+        // deformable.ColliderRecalculation = ColliderRecalculation.Auto;
+        // deformable.ColliderRecalculation = ColliderRecalculation.None;
     }
 
     void UpdateFOV()
