@@ -9,8 +9,10 @@ public class Superview : MonoBehaviour
 {
     public float smoothResetFOVAnimationSpeed = 250; // Adjust this to change the smoothing speed
     [Header("DebugVariables")]
-    public float currFOV;
+    // public float currFOV;
     public float initFOV;
+    public float currFOV;
+    public float FOVDiff;
     // public float distLatticeFront;
     // public float distLatticeBack;
     public float viewChangePersentage;
@@ -22,13 +24,9 @@ public class Superview : MonoBehaviour
       // The layer mask used to ignore the player and target objects while raycasting
     // public float holdDistance=5;          // The offset amount for positioning the object so it doesn't clip into walls
     public float mouseSensitivity=4;
-    private float LatticeSensitivity, LatticeSensitivityFront, LatticeSensitivityBack, LatticeSensitivityDepth;
+    private float LatticeSensitivity, LatticeSensitivityFront, LatticeSensitivityDepth, LatticeSensitivityBack;
     public float minFOV = 30, maxFOV = 110, midFOV;
-    public bool EnableCameraClippingPlaneShift;
-    public float CPSensitivity;
-
     private Camera playerCamera;
-
     private Transform LatticeTrans;
     private GameObject LatticeObj;
     private Deformable deformable;
@@ -41,6 +39,11 @@ public class Superview : MonoBehaviour
     private TargetController targetController;
     public float targetStartScale, targetCurrScale, targetMinScale, targetMaxScale;
     
+    // not useful
+    // public bool EnableCameraClippingPlaneShift;
+    // public float CPSensitivity;
+
+
     void Start()
     {
         playerCamera = Camera.main;
@@ -98,9 +101,9 @@ public class Superview : MonoBehaviour
         LatticeSensitivityFront = targetController.LatticeSensitivityFront;
         LatticeSensitivityBack = targetController.LatticeSensitivityBack;
         LatticeSensitivityDepth = targetController.LatticeSensitivityDepth;
-        targetCurrScale = targetController.currScale;
-        targetMinScale = targetController.minScale;
-        targetMaxScale = targetController.maxScale;
+        targetCurrScale = targetController.currObjFOV;
+        targetMinScale = targetController.minObjFOV;
+        targetMaxScale = targetController.maxObjFOV;
         targetStartScale = targetCurrScale;
 
         lockFOV = false;
@@ -108,17 +111,17 @@ public class Superview : MonoBehaviour
 
     public void UpdateDeform(Transform target)
     {
-        // print the resolution from the LatticeDeformer script
-
         LatticeTrans.LookAt(transform.position);
         // set the rotation of the lattice to be zero
         // LatticeTrans.rotation = Quaternion.Euler(0,0,0);
 
-        float frontDeformRatio = 1+LatticeSensitivityFront*viewChangePersentage; // view 1->0 then DeformRatio 1->2   //1.4
-        float backDeformRatio =  1+LatticeSensitivityBack*viewChangePersentage;//1-LatticeSensitivityBack*(viewChangePersentage); // view 1->0 then DeformRatio 1->0.5 //0.82
-        float depthDeformRatio = 1+LatticeSensitivityDepth*viewChangePersentage;
+        // print the resolution from the LatticeDeformer script
+        FOVDiff = currFOV - initFOV;
+        targetCurrScale = targetStartScale+FOVDiff;
 
-        targetCurrScale = frontDeformRatio*targetStartScale;
+        float frontDeformRatio = LatticeSensitivityFront*LatticeSensitivity*targetCurrScale; // view 1->0 then DeformRatio 1->2   //1.4
+        float backDeformRatio  = LatticeSensitivityBack *LatticeSensitivity*targetCurrScale;//1-LatticeSensitivityBack*(viewChangePersentage); // view 1->0 then DeformRatio 1->0.5 //0.82
+        float depthDeformRatio = LatticeSensitivityDepth*LatticeSensitivity*targetCurrScale*2; // depth is oneway expend, so *2
 
         // print("frontDeformRatio: "+frontDeformRatio);
         // if the target is cube
@@ -141,58 +144,67 @@ public class Superview : MonoBehaviour
         latticeDeformer = LatticeObj.GetComponent<LatticeDeformer>();
 
         latticeDeformer.ControlPoints[7] = new Vector3(
-            FTL.x*(frontDeformRatio),
-            FTL.y*(frontDeformRatio),
+            0.5f+(frontDeformRatio),
+            0.5f+(frontDeformRatio),
             FTL.z
         );
         latticeDeformer.ControlPoints[6] = new Vector3(
-            FTR.x*(frontDeformRatio),
-            FTR.y*(frontDeformRatio),
+            -0.5f-(frontDeformRatio),
+            0.5f+(frontDeformRatio),
             FTR.z
         );
         latticeDeformer.ControlPoints[4] = new Vector3(
-            FBR.x*(frontDeformRatio),
-            FBR.y*(frontDeformRatio),
+            -0.5f-(frontDeformRatio),
+            -0.5f-(frontDeformRatio),
             FBR.z
         );
         latticeDeformer.ControlPoints[5] = new Vector3(
-            FBL.x*(frontDeformRatio),
-            FBL.y*(frontDeformRatio),
+            0.5f+(frontDeformRatio),
+            -0.5f-(frontDeformRatio),
             FBL.z
         );
 
         latticeDeformer.ControlPoints[3] = new Vector3(
-            BTL.x*(backDeformRatio),
-            BTL.y*(backDeformRatio),
-            BTL.z*(depthDeformRatio)
+            0.5f+(backDeformRatio),
+            0.5f+(backDeformRatio),
+            -0.5f-(depthDeformRatio)
         );
         latticeDeformer.ControlPoints[2] = new Vector3(
-            BTR.x*(backDeformRatio),
-            BTR.y*(backDeformRatio),
-            BTR.z*(depthDeformRatio)
+            -0.5f-(backDeformRatio),
+            0.5f+(backDeformRatio),
+            -0.5f-(depthDeformRatio)
         );
         latticeDeformer.ControlPoints[0] = new Vector3(
-            BBR.x*(backDeformRatio),
-            BBR.y*(backDeformRatio),
-            BBR.z*(depthDeformRatio)
+            -0.5f-(backDeformRatio),
+            -0.5f-(backDeformRatio),
+            -0.5f-(depthDeformRatio)
         );
         latticeDeformer.ControlPoints[1] = new Vector3(
-            BBL.x*(backDeformRatio),
-            BBL.y*(backDeformRatio),
-            BBL.z*(depthDeformRatio)
+            0.5f+(backDeformRatio),
+            -0.5f-(backDeformRatio),
+            -0.5f-(depthDeformRatio)
         );
+
+        FTL = latticeDeformer.ControlPoints[7];
+        FTR = latticeDeformer.ControlPoints[6];
+        FBR = latticeDeformer.ControlPoints[4];
+        FBL = latticeDeformer.ControlPoints[5];
+
+        BTL = latticeDeformer.ControlPoints[3];
+        BTR = latticeDeformer.ControlPoints[2];
+        BBR = latticeDeformer.ControlPoints[0];
+        BBL = latticeDeformer.ControlPoints[1];
         // latticeDeformer.ControlPoints[6] = ;
         // latticeDeformer.ControlPoints[4] = ;
         // latticeDeformer.ControlPoints[5] = ;
         // relation of FOV and distance: https://docs.unity3d.com/Manual/FrustumSizeAtDistance.html
         // return viewChangePersentage;
-
     }
     public void DetachDeform(Transform target)
     {
         // enable mesh collider
         // target.GetComponent<MeshCollider>().enabled = true;
-        target.GetComponent<TargetController>().currScale = targetCurrScale;
+        target.GetComponent<TargetController>().currObjFOV = targetCurrScale;
         deformable = target.GetComponent<Deformable>();
         deformable.RecalculateMeshCollider();
         // deformable.ColliderRecalculation = ColliderRecalculation.Auto;
@@ -202,7 +214,8 @@ public class Superview : MonoBehaviour
 
     void UpdateFOV()
     {
-        currFOV = currFOV - mouseSensitivity * Input.mouseScrollDelta.y;
+        float fovChange = mouseSensitivity * Input.mouseScrollDelta.y;
+        
         // MacOS touch mouse scroll is continuous
         // windows mouse scroll is discrete, and below code is not working
         // Use Lerp to smoothly change the FOV value
@@ -212,28 +225,34 @@ public class Superview : MonoBehaviour
         //     smoothFOVAnimation
         // );
 
-        if (currFOV < minFOV)
-        {
-            currFOV = minFOV;
-        }else if (currFOV > maxFOV)
-        {
-            currFOV = maxFOV;
-        }
-        playerCamera.fieldOfView = currFOV;
+        // bound between object size
+        if(targetCurrScale == targetMinScale && fovChange > 0)
+            return;
+        if(targetCurrScale == targetMaxScale && fovChange < 0)
+            return;
 
+        currFOV = currFOV - fovChange;
+        // bound between max and min FOV
+        if (currFOV < minFOV)
+            currFOV = minFOV;
+        else if (currFOV > maxFOV)
+            currFOV = maxFOV;
+
+        playerCamera.fieldOfView = currFOV;
         viewChangePersentage = (currFOV-initFOV)/LatticeSensitivity;
 
-        if(EnableCameraClippingPlaneShift)
-        {
-           // camera move back
-            playerCamera.nearClipPlane = CPSensitivity*(1-viewChangePersentage)+0.01f;
-            // shift z position of playerCamera
-            playerCamera.transform.localPosition = new Vector3(
-                playerCamera.transform.localPosition.x, 
-                playerCamera.transform.localPosition.y, 
-                -(playerCamera.nearClipPlane)
-            );
-        }
+        // // not going to run
+        // if(EnableCameraClippingPlaneShift)
+        // {
+        //    // camera move back
+        //     playerCamera.nearClipPlane = CPSensitivity*(1-viewChangePersentage)+0.01f;
+        //     // shift z position of playerCamera
+        //     playerCamera.transform.localPosition = new Vector3(
+        //         playerCamera.transform.localPosition.x, 
+        //         playerCamera.transform.localPosition.y, 
+        //         -(playerCamera.nearClipPlane)
+        //     );
+        // }
     }
     void ResetFOV(float speed)
     {

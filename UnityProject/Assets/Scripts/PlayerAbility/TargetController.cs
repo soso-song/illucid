@@ -9,19 +9,19 @@ public class TargetController : MonoBehaviour
     public int maxPickTime = 3;
 
     [Header("SuperviewParameters")]
-    public float LatticeSensitivity=150;
+    public float LatticeSensitivity=0.005f;
     public float LatticeSensitivityFront=2;
+    public float LatticeSensitivityDepth=4;
     public float LatticeSensitivityBack=4;
-    public float LatticeSensitivityDepth=9;
     // public float currScaleFront=1;
     // public float currScaleBack=1;
     // public float currScaleDepth=1;
     // public float maxScaleFront=2;
     // public float maxScaleBack=4;
     // public float maxScaleDepth=9;
-    public float currScale=1;
-    public float minScale=0.1f;
-    public float maxScale=4;
+    public float currObjFOV=0;
+    public float minObjFOV=-12;
+    public float maxObjFOV=80;
 
     void Start()
     {
