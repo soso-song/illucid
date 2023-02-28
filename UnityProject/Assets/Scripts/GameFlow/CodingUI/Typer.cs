@@ -30,7 +30,6 @@ public class Typer : MonoBehaviour
     void LoadImage()
     {
         string filePath = dirPath+"/"+count.ToString()+".png";
-        Debug.Log(filePath);
         if (File.Exists(filePath)){
             fileData = File.ReadAllBytes(filePath);
             tex = new Texture2D(2,2);
