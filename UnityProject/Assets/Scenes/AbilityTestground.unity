@@ -2874,13 +2874,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011cb284f168849219fbd8c345807aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothFOVAnimation: 0.5
+  smoothResetFOVAnimationSpeed: 250
   currFOV: 0
   initFOV: 0
   viewChangePersentage: 0
   mouseSensitivity: 4
   minFOV: 30
   maxFOV: 110
+  midFOV: 0
   EnableCameraClippingPlaneShift: 0
   CPSensitivity: 6
   FTL:

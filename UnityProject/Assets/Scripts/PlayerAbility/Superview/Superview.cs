@@ -7,9 +7,8 @@ using float3 = Unity.Mathematics.float3;
 
 public class Superview : MonoBehaviour
 {
-    public float smoothFOVAnimation = 0.5f; // Adjust this to change the smoothing speed
+    public float smoothResetFOVAnimationSpeed = 250; // Adjust this to change the smoothing speed
     [Header("DebugVariables")]
-
     public float currFOV;
     public float initFOV;
     // public float distLatticeFront;
@@ -24,7 +23,7 @@ public class Superview : MonoBehaviour
     // public float holdDistance=5;          // The offset amount for positioning the object so it doesn't clip into walls
     public float mouseSensitivity=4;
     private float LatticeSensitivity, LatticeSensitivityFront, LatticeSensitivityBack, LatticeSensitivityDepth;
-    public float minFOV = 30, maxFOV = 110;
+    public float minFOV = 30, maxFOV = 110, midFOV;
     public bool EnableCameraClippingPlaneShift;
     public float CPSensitivity;
 
@@ -34,6 +33,7 @@ public class Superview : MonoBehaviour
     private GameObject LatticeObj;
     private Deformable deformable;
     private LatticeDeformer latticeDeformer;
+    private bool lockFOV = true;
 
     public float3 FTL, FTR, FBR, FBL, BTL, BTR, BBR, BBL;
 
@@ -45,11 +45,16 @@ public class Superview : MonoBehaviour
     {
         playerCamera = Camera.main;
         currFOV = playerCamera.fieldOfView;
+        midFOV = (minFOV + maxFOV) / 2;
     }
 
     void Update()
     {
-        UpdateFOV();
+        // if not holding object
+        if (!lockFOV)
+            UpdateFOV();
+        else
+            ResetFOV(smoothResetFOVAnimationSpeed);
     }
 
     public void InitDeform(Transform target)
@@ -97,11 +102,12 @@ public class Superview : MonoBehaviour
         targetMinScale = targetController.minScale;
         targetMaxScale = targetController.maxScale;
         targetStartScale = targetCurrScale;
+
+        lockFOV = false;
     }
 
     public void UpdateDeform(Transform target)
     {
- 
         // print the resolution from the LatticeDeformer script
 
         LatticeTrans.LookAt(transform.position);
@@ -191,16 +197,20 @@ public class Superview : MonoBehaviour
         deformable.RecalculateMeshCollider();
         // deformable.ColliderRecalculation = ColliderRecalculation.Auto;
         // deformable.ColliderRecalculation = ColliderRecalculation.None;
+        lockFOV = true;
     }
 
     void UpdateFOV()
     {
+        currFOV = currFOV - mouseSensitivity * Input.mouseScrollDelta.y;
+        // MacOS touch mouse scroll is continuous
+        // windows mouse scroll is discrete, and below code is not working
         // Use Lerp to smoothly change the FOV value
-        currFOV = Mathf.Lerp(
-            currFOV, 
-            currFOV - mouseSensitivity * Input.mouseScrollDelta.y, 
-            smoothFOVAnimation
-        );
+        // currFOV = Mathf.Lerp(
+        //     currFOV, 
+        //     currFOV - mouseSensitivity * Input.mouseScrollDelta.y, 
+        //     smoothFOVAnimation
+        // );
 
         if (currFOV < minFOV)
         {
@@ -211,11 +221,6 @@ public class Superview : MonoBehaviour
         }
         playerCamera.fieldOfView = currFOV;
 
-        // float currFOVChangePersentage = (currFOV-minFOV)/(maxFOV-minFOV);
-        // float initFOVChangePersentage = (initFOV-minFOV)/(maxFOV-minFOV);
-        // viewChangePersentage = Mathf.Abs(currFOVChangePersentage - initFOVChangePersentage);
-        // viewChangePersentage = (currFOV-minFOV)/(maxFOV-minFOV);
-        // viewChangePersentage = (currFOV-minFOV)/(initFOV-minFOV);
         viewChangePersentage = (currFOV-initFOV)/LatticeSensitivity;
 
         if(EnableCameraClippingPlaneShift)
@@ -229,5 +234,12 @@ public class Superview : MonoBehaviour
                 -(playerCamera.nearClipPlane)
             );
         }
+    }
+    void ResetFOV(float speed)
+    {
+        // playerCamera.fieldOfView = Mathf.MoveTowards(playerCamera.fieldOfView, midFOV, 2 * Time.deltaTime);
+        // playerCamera.fieldOfView = midFOV;
+        currFOV =  Mathf.MoveTowards(playerCamera.fieldOfView, midFOV, speed * Time.deltaTime);
+        playerCamera.fieldOfView = currFOV;
     }
 }
