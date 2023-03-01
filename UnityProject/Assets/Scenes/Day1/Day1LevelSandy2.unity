@@ -540,43 +540,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 4.080392
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.16562648
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 2.6365147
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.7290325
+      value: -8.1328
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.4000006
+      value: 7.484
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 39.149963
+      value: 38.685
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9907035
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.13603932
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -584,11 +584,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 15.637
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977568, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6175747962855977569, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
       propertyPath: m_Mesh
@@ -2205,8 +2205,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736855068}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 140.7359, y: 7.479921, z: -64.00136}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 118.69, y: 5.6008, z: -40.541}
+  m_LocalScale: {x: 0.77903, y: 0.77903, z: 0.77903}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 159760572}
@@ -2358,11 +2358,11 @@ MonoBehaviour:
   maxPickTime: 3
   LatticeSensitivity: 0.005
   LatticeSensitivityFront: 2
-  LatticeSensitivityDepth: 4
+  LatticeSensitivityDepth: 12
   LatticeSensitivityBack: 4
   currObjFOV: 0
-  minObjFOV: -12
-  maxObjFOV: 80
+  minObjFOV: -120
+  maxObjFOV: 120
 --- !u!1 &794609973
 GameObject:
   m_ObjectHideFlags: 0
@@ -6145,8 +6145,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2100560561}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -94.83591, y: -2.5760794, z: 107.12135}
-  m_LocalScale: {x: 4.4078074, y: 458.12833, z: 1110.5522}
+  m_LocalPosition: {x: -94.252, y: 0.7, z: 107.12135}
+  m_LocalScale: {x: 4.4078074, y: 421.5422, z: 912.51855}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1765865390}
