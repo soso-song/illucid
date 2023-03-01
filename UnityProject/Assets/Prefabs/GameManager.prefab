@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mask: {fileID: 3906994128017517837, guid: 48cb42a3086a1824ab92f1a2865031ae, type: 3}
+  maskPerfab: {fileID: 3906994128017517825, guid: 48cb42a3086a1824ab92f1a2865031ae, type: 3}

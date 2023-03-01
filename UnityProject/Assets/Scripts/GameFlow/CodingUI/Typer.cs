@@ -20,7 +20,7 @@ public class Typer : MonoBehaviour
 
     void Start()
     {
-        dirPath = Application.dataPath + "/Sprites/Code/"+SceneManager.GetActiveScene().name;
+        dirPath = "Code/"+SceneManager.GetActiveScene().name;
         GameFlowControl = GameManager.GetComponent<GameFlowControl>();
         LoadImage();
     }
@@ -29,11 +29,13 @@ public class Typer : MonoBehaviour
     // Update is called once per frame
     void LoadImage()
     {
-        string filePath = dirPath+"/"+count.ToString()+".png";
-        if (File.Exists(filePath)){
-            fileData = File.ReadAllBytes(filePath);
-            tex = new Texture2D(2,2);
-            tex.LoadImage(fileData);
+        string filePath = dirPath+"/"+count.ToString();
+        Debug.Log(filePath);
+        // check if resource exists
+        tex = Resources.Load<Texture2D>(filePath);
+
+        if (tex != null){
+            tex = Resources.Load<Texture2D>(filePath);
             img.texture = tex;
         }else{
             Debug.Log("next level");

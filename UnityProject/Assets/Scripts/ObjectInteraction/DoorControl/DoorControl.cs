@@ -5,6 +5,7 @@ using UnityEngine;
 public class DoorControl : MonoBehaviour
 {
     public Animator Door;
+    public Transform DoorLight;
 
     // Start is called before the first frame update
     void Start()
@@ -21,10 +22,12 @@ public class DoorControl : MonoBehaviour
     public void Open()
     {
         Door.Play("Door1Open", 0, 0.0f);
+        DoorLight.gameObject.SetActive(true);
     }
 
     public void Close(){
         Door.Play("Door1Close", 0, 0.0f);
+        DoorLight.gameObject.SetActive(false);
     }
 }
 

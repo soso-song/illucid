@@ -42,13 +42,15 @@ public class Superview : MonoBehaviour
     // not useful
     // public bool EnableCameraClippingPlaneShift;
     // public float CPSensitivity;
-
+    // private AudioClip zoomLimitSound;
+    public AudioSource zoomLimitSound;
 
     void Start()
     {
         playerCamera = Camera.main;
         currFOV = playerCamera.fieldOfView;
         midFOV = (minFOV + maxFOV) / 2;
+        // zoomLimitSound = Resources.Load<AudioClip>("Sounds/ZoomLimit");
     }
 
     void Update()
@@ -227,10 +229,15 @@ public class Superview : MonoBehaviour
         // );
 
         // bound between object size
-        if(targetCurrScale == targetMinScale && fovChange > 0)
+        if(targetCurrScale == targetMinScale && fovChange > 0){
+            zoomLimitSound.Play();
             return;
-        if(targetCurrScale == targetMaxScale && fovChange < 0)
+        }
+            
+        if(targetCurrScale == targetMaxScale && fovChange < 0){
+            zoomLimitSound.Play();
             return;
+        }
 
         currFOV = currFOV - fovChange;
         // bound between max and min FOV
