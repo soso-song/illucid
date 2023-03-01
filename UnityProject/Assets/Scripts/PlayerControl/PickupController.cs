@@ -37,7 +37,8 @@ public class PickupController : MonoBehaviour
         targetRb = inputTarget.GetComponent<Rigidbody>();
         if (targetRb)
         {
-            // targetRb.isKinematic = true;
+            targetRb.isKinematic = false; // for poster
+
             targetRb.useGravity = false;
             targetRb.drag = pickupDrag;
             

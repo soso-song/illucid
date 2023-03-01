@@ -112,6 +112,7 @@ public class Superview : MonoBehaviour
     public void UpdateDeform(Transform target)
     {
         LatticeTrans.LookAt(transform.position);
+
         // set the rotation of the lattice to be zero
         // LatticeTrans.rotation = Quaternion.Euler(0,0,0);
 
