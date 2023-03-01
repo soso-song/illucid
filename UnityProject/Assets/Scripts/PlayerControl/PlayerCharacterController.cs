@@ -86,7 +86,7 @@ public class PlayerCharacterController : MonoBehaviour
         // OrthCamera.enabled = false;
         // PlayerCamera = PersCamera;
         PlayerCameras[0].gameObject.SetActive(true);
-        PlayerCameras[1].gameObject.SetActive(true);
+        // PlayerCameras[1].gameObject.SetActive(true);
         // print(PlayerCamera);
     }
 
@@ -171,7 +171,7 @@ public class PlayerCharacterController : MonoBehaviour
 
             // PlayerCameras[CamNum].transform.localEulerAngles = new Vector3(m_CameraVerticalAngle, 0, 0);
             PlayerCameras[0].transform.localEulerAngles = new Vector3(m_CameraVerticalAngle, 0, 0);
-            PlayerCameras[1].transform.localEulerAngles = new Vector3(m_CameraVerticalAngle, 0, 0);
+            // PlayerCameras[1].transform.localEulerAngles = new Vector3(m_CameraVerticalAngle, 0, 0);
         }
 
         // bool isSprinting = false;
@@ -295,7 +295,7 @@ public class PlayerCharacterController : MonoBehaviour
             m_Controller.center = Vector3.up * m_Controller.height * 0.5f;
             // PlayerCameras[CamNum].transform.localPosition = Vector3.up * m_TargetCharacterHeight * CameraHeightRatio;
             PlayerCameras[0].transform.localPosition = Vector3.up * m_TargetCharacterHeight * CameraHeightRatio;
-            PlayerCameras[1].transform.localPosition = Vector3.up * m_TargetCharacterHeight * CameraHeightRatio;
+            // PlayerCameras[1].transform.localPosition = Vector3.up * m_TargetCharacterHeight * CameraHeightRatio;
             // m_Actor.AimPoint.transform.localPosition = m_Controller.center;
         }
         // Update smooth height
@@ -309,8 +309,8 @@ public class PlayerCharacterController : MonoBehaviour
             //     Vector3.up * m_TargetCharacterHeight * CameraHeightRatio, CrouchingSharpness * Time.deltaTime);
             PlayerCameras[0].transform.localPosition = Vector3.Lerp(PlayerCameras[0].transform.localPosition,
                 Vector3.up * m_TargetCharacterHeight * CameraHeightRatio, CrouchingSharpness * Time.deltaTime);
-            PlayerCameras[1].transform.localPosition = Vector3.Lerp(PlayerCameras[1].transform.localPosition,
-                Vector3.up * m_TargetCharacterHeight * CameraHeightRatio, CrouchingSharpness * Time.deltaTime);
+            // PlayerCameras[1].transform.localPosition = Vector3.Lerp(PlayerCameras[1].transform.localPosition,
+            //     Vector3.up * m_TargetCharacterHeight * CameraHeightRatio, CrouchingSharpness * Time.deltaTime);
             // m_Actor.AimPoint.transform.localPosition = m_Controller.center;
         }
     }
