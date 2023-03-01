@@ -2,19 +2,13 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    private int targetMask = 1 << 12 | 1 << 13;
-    // private int _maxBounce = 20;
-    // public Transform startPoint;
-    // private int _count ;
     private LineRenderer laser;
-
-    // [SerializeField]
-    // private Vector3 _offSet;
+    public bool isTriggered = false;
 
     private void Start()
     {
         laser = GetComponent<LineRenderer>();
-        
+        laser.SetPosition(0, transform.position);
     }
     private void Update()
     {
@@ -22,8 +16,6 @@ public class Laser : MonoBehaviour
     }
     private void castLaser(Vector3 position , Vector3 direction)
     {
-        laser.SetPosition(0, position);
-       
         Ray ray = new Ray(position, direction);
         RaycastHit hit;
         
@@ -35,6 +27,16 @@ public class Laser : MonoBehaviour
             laser.SetPosition(2, hit.point);
             if(Physics.Raycast(ray2 , out hit2 , 300))
             {
+                // check if hit object has name "Ground"
+                if (hit2.collider.gameObject.name == "Ground")
+                {
+                    laser.material.color = Color.green;
+                    isTriggered = true;
+                } else
+                {
+                    laser.material.color = Color.red;
+                    isTriggered = false;
+                }
                 laser.SetPosition(2, hit2.point);
             }
         }
