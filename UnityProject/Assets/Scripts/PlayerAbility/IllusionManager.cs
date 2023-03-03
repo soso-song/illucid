@@ -19,16 +19,22 @@ public class IllusionManager : MonoBehaviour
     // public LayerMask targetMask;        // The layer mask used to hit only potential targets with a raycast
       // The layer mask used to ignore the player and target objects while raycasting
     public float holdDistance;          // The offset amount for positioning the object so it doesn't clip into walls
-    public PickupController PickupController;
+    private PickupController PickupController;
 
     [Header("Superview")]
-    public Superview Superview;
-    public bool deforming = false;
+    private Superview Superview;
+    private bool deforming = false;
+
+    [Header("Edgecut")]
+    private Edgecut Edgecut;
 
     void Start()
     {
         // Cursor.visible = false;
         // Cursor.lockState = CursorLockMode.Locked;
+        Superview = GetComponent<Superview>();
+        Edgecut = GetComponent<Edgecut>();
+        PickupController = GetComponent<PickupController>();
     }
 
     void Update()
@@ -48,11 +54,12 @@ public class IllusionManager : MonoBehaviour
                     Superview.UpdateDeform(target); // return viewChangePersentage
                 }
             }
+            // else if (target.gameObject.layer == LAYER_CUTABLE)
+            // {
+            //     Edgecut.CutTarget(target);
+            // }
         }
-        // else if (target != null && target.gameObject.layer == LAYER_CUTABLE)
-        // {
-        //     CutTarget();
-        // }
+        
     }
 
     void HandleInput()
@@ -79,7 +86,7 @@ public class IllusionManager : MonoBehaviour
                 }
                 if (target.gameObject.layer == LAYER_CUTABLE)
                 {   
-                    // CutTarget(); // enable this !
+                    Edgecut.CutTarget(target); // enable this !
                 }
                 target = null;
             }

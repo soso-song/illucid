@@ -1,5 +1,3 @@
-// using System.Collections;
-// using System.Collections.Generic;
 using UnityEngine;
 using Deform;
 using float3 = Unity.Mathematics.float3;
