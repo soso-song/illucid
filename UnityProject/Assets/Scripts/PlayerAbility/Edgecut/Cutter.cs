@@ -1,71 +1,120 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Cutter : MonoBehaviour
 {
-    public Camera cam;
-    GameObject cutterL;
-    GameObject cutterR;
-    GameObject pivotL;
-    GameObject pivotR;
-    float width;
-    
-    // Start is called before the first frame update
+    [Header("DebugVariables")]
+    public float leftDistance;
+    public float midDistance;
+    public float rightDistance;
+    public bool CutReady = false;
+
+    [Header("Parameters")]
+    public Vector3 A;
+    public Vector3 B;
+    public Vector3 C;
+    public float LeftRightPointOffset = 2.5f;
+    public float MinDistance = 5f;
+    public float MaxDistance = 70f;
+    public float DistanceTolerance = 0.1f;
+
+    Camera cam;
+    GameObject TargetPoint, LeftPoint, RightPoint;
+    Mesh mesh;
+
     void Start()
     {
-        pivotL = new GameObject("PivotL");
-        pivotR = new GameObject("PivotR");
-        cutterL = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        cutterR = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        cutterL.GetComponent<Collider>().enabled = false;
-        cutterR.GetComponent<Collider>().enabled = false;
-        // not render the cutter
-        cutterL.GetComponent<Renderer>().enabled = false;
-        cutterR.GetComponent<Renderer>().enabled = false;
+        // use the inputs
+        cam = Camera.main;
+        A = transform.GetChild(0).transform.position;
+        B = transform.GetChild(1).transform.position;
 
-        pivotL.transform.parent = transform;
-        pivotR.transform.parent = transform;
+        // create the mesh
+        mesh = new Mesh();
+        mesh.vertices = new Vector3[] {A, B, cam.transform.position};
+        mesh.triangles =  new int[] {0, 1, 2};
 
-        cutterL.transform.parent = pivotL.transform;
-        cutterR.transform.parent = pivotR.transform;
+        // create the TargetPoint, LeftPoint and RightPoint
+        TargetPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        LeftPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        RightPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        // disable the collider
+        TargetPoint.GetComponent<Collider>().enabled = false;
+        LeftPoint.GetComponent<Collider>().enabled = false;
+        RightPoint.GetComponent<Collider>().enabled = false;
+        TargetPoint.name = "TargetPoint";
+        LeftPoint.name = "LeftPoint";
+        RightPoint.name = "RightPoint";
+        LeftPoint.transform.position = new Vector3(LeftRightPointOffset,0,0);
+        RightPoint.transform.position = new Vector3(-LeftRightPointOffset,0,0);
+        LeftPoint.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+        RightPoint.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+        TargetPoint.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+        LeftPoint.transform.parent = TargetPoint.transform;
+        RightPoint.transform.parent = TargetPoint.transform;
+        TargetPoint.transform.parent = transform;
 
-
-        width = GetComponent<Renderer>().bounds.size.x;
-        pivotL.transform.position = new Vector3(transform.position.x - width/2, transform.position.y, transform.position.z);
-        pivotR.transform.position = new Vector3(transform.position.x + width/2, transform.position.y, transform.position.z);
-        cutterL.transform.position = new Vector3(transform.position.x - width, transform.position.y, transform.position.z);
-        cutterR.transform.position = new Vector3(transform.position.x + width, transform.position.y, transform.position.z);
-
-        cutterL.transform.Rotate(90, 0, 0);
-        cutterR.transform.Rotate(90, 0, 0);
-
-        // add 0.1f to the width of gameObject
-        transform.localScale += new Vector3(0.01f, 0, 0);
-        // increase the width of mesh collider
+        // set the position of TargetPoints
+        // TargetPoint.transform.position = (A + B) / 2; // will use cam.transform.forward
     }
 
-    // Update is called once per frame
-    // float camX, camY;
     void Update()
     {
-        // let cutterL and cutterR facing sideway of the camera
-        // camX = cam.transform.position.x;
-        // camY = cam.transform.position.y;
+        C = cam.transform.position;
+
+        UpdateCutterTriangle();
+
+        UpdateTargetPoint();
+
+        // get the distance between Camera and TargetPoint
+        midDistance = Vector3.Distance(C, TargetPoint.transform.position);
+        RaycastHit hitL, hitR;
+        Physics.Raycast(C, LeftPoint.transform.position - C, out hitL, Mathf.Infinity);
+        Physics.Raycast(C, RightPoint.transform.position - C, out hitR, Mathf.Infinity);
+        leftDistance = Vector3.Distance(C, hitL.point);
+        rightDistance = Vector3.Distance(C, hitR.point);
+        // show the raycast
+        Debug.DrawRay(C, LeftPoint.transform.position - C, Color.red);
+        Debug.DrawRay(C, RightPoint.transform.position - C, Color.red);
+
+        CutReady = false;
+
+        // distance is infinity
+        if (leftDistance == 0 || rightDistance == 0)
+            return;
+        // difference is too small
+        if (Mathf.Abs(leftDistance - rightDistance) < MinDistance)
+            return;
+        if (Mathf.Abs(leftDistance - rightDistance) > MaxDistance)
+            return;
+        // both side is not close to the targetPoint
+        if(Mathf.Abs(leftDistance - midDistance) > DistanceTolerance && Mathf.Abs(rightDistance - midDistance) > DistanceTolerance)
+            return;
         
-        pivotL.transform.LookAt(cam.transform.position);
-        pivotR.transform.LookAt(cam.transform.position);
-        // // // let cutterL and cutterR always face the GameObject
-        pivotL.transform.Rotate(0, 90, 0);
-        pivotR.transform.Rotate(0, 90, 180);
-        // let cutterL and cutterR's width is the same as the distance from the GameObject to the camera
-        pivotL.transform.localScale = new Vector3(Vector3.Distance(cam.transform.position, pivotL.transform.position)/10, 1, 1);
-        pivotR.transform.localScale = new Vector3(Vector3.Distance(cam.transform.position, pivotR.transform.position)/10, 1, 1);
-        // let cutterL rotate around its center
-        // let cutterL only between its center and the position of the cam
-        // if (Vector3.Distance(cutterL.transform.position, transform.position) > Vector3.Distance(cam.transform.position, transform.position))
-        // {
-        //     cutterL.transform.RotateAround(transform.position, Vector3.up, -1);
-        // }
+        CutReady = true;
+    }
+
+    void UpdateCutterTriangle()
+    {
+                // could only update when release the object
+        mesh.vertices = new Vector3[] {A, B, C};
+        mesh.triangles =  new int[] {0, 1, 2};
+        gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
+    }
+    void UpdateTargetPoint()
+    {
+
+        TargetPoint.transform.position = (A + B) / 2;
+        TargetPoint.transform.LookAt(C);
+        // Vector3 dir = cam.transform.forward;
+
+        // // Calculate the line vector and distance between the line and the ray
+        // Vector3 AB = B - A;
+        // Vector3 cross = Vector3.Cross(AB, dir);
+        // float distance = Vector3.Magnitude(cross) / Vector3.Magnitude(dir);
+
+        // // Calculate the intersection point
+        // Vector3 CA = A - C;
+        // Vector3 projection = Vector3.Dot(CA, AB) / Vector3.Dot(AB, AB) * AB;
+        // Vector3 closestPoint = A + projection;
     }
 }

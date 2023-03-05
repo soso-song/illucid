@@ -1,24 +1,19 @@
 using UnityEngine;
 using Assets.Scripts; // to access Slicer
 
-public class Edgecut : MonoBehaviour
+public class EdgecutOld : MonoBehaviour
 {
     [Header("DebugVariables")]
     // public Transform target;            // The target object we picked up for scaling
     // public Transform door;
 
     [Header("Parameters")]
+    public GameObject cutterN;
     public LayerMask cutterWalls;
     float originalDistance;             // The original distance between the player playerCamera and the target
     float originalScale;                // The original scale of the target objects prior to being resized
     Vector3 targetScale;                // The scale we want our object to be set to each frame
     
-    void Start()
-    {
-        // Cursor.visible = false;
-        // Cursor.lockState = CursorLockMode.Locked;
-    }
-
     public void CutTarget(Transform target){
         // cutterNL = cutterN.transform.Find("PivotL").gameObject.transform.Find("Plane").gameObject;
         // cutterNR = cutterN.transform.Find("PivotR").gameObject.transform.Find("Plane").gameObject;
@@ -26,8 +21,8 @@ public class Edgecut : MonoBehaviour
         // cutterFR = cutterF.transform.Find("PivotR").gameObject.transform.Find("Plane").gameObject;
 
         // long cut method
-        Vector3 pos1 = new Vector3(0, 3, 0); //cutterN.transform.Find("PivotR").gameObject.transform.position;
-        Vector3 pos2 = new Vector3(0, 3, 0); //cutterN.transform.Find("PivotR").gameObject.transform.position + new Vector3(0, 3, 0);
+        Vector3 pos1 = cutterN.transform.Find("PivotR").gameObject.transform.position;
+        Vector3 pos2 = cutterN.transform.Find("PivotR").gameObject.transform.position + new Vector3(0, 3, 0);
         Vector3 pos3 = transform.position;
         Vector3 edge1 = pos2 - pos1;
         Vector3 edge2 = pos3 - pos1;
