@@ -47,6 +47,9 @@ public class Edgecut : MonoBehaviour
         // Vector3 nearEdgeDirection = cutterN.transform.Find("PivotR").gameObject.transform.position - cutterN.transform.Find("PivotL").gameObject.transform.position;
         // Vector3 farEdgeDirection = cutterF.transform.Find("PivotR").gameObject.transform.position - cutterF.transform.Find("PivotL").gameObject.transform.position;
         // cutterN.transform.localScale += new Vector3(0.1f, 0, 0);
+        originalDistance = 3; // holdDistance
+        originalScale = 1;
+        targetScale = new Vector3(1, 1, 1);
         ResizeTarget(slices[0].transform, originalDistance, originalScale, targetScale, 1); // right side
         // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
         ResizeTarget(slices[1].transform, originalDistance, originalScale, targetScale, 0); // left side

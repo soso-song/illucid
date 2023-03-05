@@ -16,8 +16,8 @@ public class Cutter : MonoBehaviour
     {
         pivotL = new GameObject("PivotL");
         pivotR = new GameObject("PivotR");
-        cutterL = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        cutterR = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        cutterL = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        cutterR = GameObject.CreatePrimitive(PrimitiveType.Quad);
         cutterL.GetComponent<Collider>().enabled = false;
         cutterR.GetComponent<Collider>().enabled = false;
         // not render the cutter
