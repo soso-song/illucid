@@ -246,6 +246,8 @@ public class Superview : MonoBehaviour
 
         playerCamera.fieldOfView = currFOV;
         viewChangePersentage = (currFOV-initFOV)/LatticeSensitivity;
+        if (fovChange != 0)
+            Debug.Log("Time: "+Time.time+" curFOV: "+currFOV+" viewChangePersentage: "+viewChangePersentage);
 
         // // not going to run
         // if(EnableCameraClippingPlaneShift)

@@ -35,6 +35,8 @@ public class TargetController : MonoBehaviour
     public void IncrementDrop()
     {
         pickTime += 1;
+        Debug.Log("Object: " + gameObject.name + " has been picked " + pickTime + " times, cur FOV:" + currObjFOV);
+        
         // switch (pickTime)
         // {
         //     case 1:
