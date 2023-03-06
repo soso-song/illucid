@@ -91,7 +91,6 @@ public class IllusionManager : MonoBehaviour
                 target = null;
             }
         }
-
     }
 
     void UpdateOutLine(){
