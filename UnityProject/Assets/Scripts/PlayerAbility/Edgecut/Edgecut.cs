@@ -11,7 +11,7 @@ public class Edgecut : MonoBehaviour
     public Cutter[] cutters;
 
     [Header("Parameters")]
-    public LayerMask cutterLayer;
+    // public LayerMask cutterLayer;
     // public int cutterLayerInt;
     float originalDistance;             // The original distance between the player playerCamera and the target
     float originalScale;                // The original scale of the target objects prior to being resized
@@ -49,48 +49,64 @@ public class Edgecut : MonoBehaviour
         }
 
     
+        // check target is intersect with cutter
         cutter.UpdateCutterTriangleOnce();
         StartCoroutine(PauseOneFrame()); // wait one frame for cutter to run ontrigger functions since they reset collider.sharedMesh makes them weird
-        print(cutter.isIntersectObject);
-        // if(cutter.isIntersectObject){
-            
-        // }
-        // GameObject[] slices = Slicer.Slice(cutterNRPlane, target.gameObject);
+        Debug.Log("-------------------");
+        Debug.Log("isIntersectObject:" + cutter.isIntersectObject);
+        if(!cutter.isIntersectObject){
+            return;
+        }
 
-        // // if(slices.Length != 2){ // didnt cut
-        // //     return;
-        // // }
+        // check two sides of cutter
+        RaycastHit[] hits = cutter.CheckCutReady();
+        Debug.Log("isCutReady:" + cutter.isCutReady);
+        if(hits ==  null || hits.Length != 2){
+            return;
+        }
+    
+        // cut the target
+        GameObject[] slices = Slicer.Slice(cutterNRPlane, target.gameObject);
+        if(slices.Length != 2){ // didnt cut, error happens
+            // error message
+            Debug.Log("error: didnt cut to two pieces");
+            return;
+        }
 
-        // Destroy(target.gameObject);
-        // // Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
-        // slices[0].GetComponent<Rigidbody>().isKinematic = true;
-        // slices[1].GetComponent<Rigidbody>().isKinematic = true;
+        Debug.Log("cut success");
 
-        // // resizeTarget
-        // // Vector3 nearEdgeDirection = cutterN.transform.Find("PivotR").gameObject.transform.position - cutterN.transform.Find("PivotL").gameObject.transform.position;
-        // // Vector3 farEdgeDirection = cutterF.transform.Find("PivotR").gameObject.transform.position - cutterF.transform.Find("PivotL").gameObject.transform.position;
-        // // cutterN.transform.localScale += new Vector3(0.1f, 0, 0);
-        // originalDistance = 3; // holdDistance
-        // originalScale = 1;
-        // targetScale = new Vector3(1, 1, 1);
-        // // ResizeTarget(slices[0].transform, originalDistance, originalScale, targetScale, 1); // right side
-        // // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
-        // // ResizeTarget(slices[1].transform, originalDistance, originalScale, targetScale, 0); // left side
-        // // cutterN.transform.localScale -= new Vector3(0.1f, 0, 0);
+        Destroy(target.gameObject);
+        // Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
+        slices[0].GetComponent<Rigidbody>().isKinematic = true;
+        slices[1].GetComponent<Rigidbody>().isKinematic = true;
+
+        // resizeTarget
+        // Vector3 nearEdgeDirection = cutterN.transform.Find("PivotR").gameObject.transform.position - cutterN.transform.Find("PivotL").gameObject.transform.position;
+        // Vector3 farEdgeDirection = cutterF.transform.Find("PivotR").gameObject.transform.position - cutterF.transform.Find("PivotL").gameObject.transform.position;
+        // cutterN.transform.localScale += new Vector3(0.1f, 0, 0);
+        originalDistance = 3; // holdDistance
+        originalScale = 1;
+        targetScale = new Vector3(1, 1, 1);
+
+        // cutter.GetLeftRightCutter();
+        ResizeTarget(slices[1].transform, hits[0], originalDistance, originalScale, targetScale); // right side
+        // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
+        ResizeTarget(slices[0].transform, hits[1], originalDistance, originalScale, targetScale); // left side
+        // cutterN.transform.localScale -= new Vector3(0.1f, 0, 0);
     }
 
     float offsetFactor = 2f;
 
-    public void ResizeTarget(Transform target, float originalDistance, float originalScale, Vector3 targetScale, int hitIndex = 0){
+    public void ResizeTarget(Transform target, RaycastHit hit, float originalDistance, float originalScale, Vector3 targetScale){
         // RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity, cutterLayer);
+        // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity, cutterLayer);
         // send raycastall from transform.position to transform.forward
         // if (Physics.RaycastAll(ray, out hits, Mathf.Infinity, cutterWalls))
         // {
         // Set the new position of the target by getting the hit point and moving it back a bit
         // depending on the scale and offset factor
-        target.position = hits[hitIndex].point - transform.forward * offsetFactor * targetScale.x;
+        target.position = hit.point - transform.forward * offsetFactor * targetScale.x;
 
         // Calculate the current distance between the camera and the target object
         float currentDistance = Vector3.Distance(transform.position, target.position);

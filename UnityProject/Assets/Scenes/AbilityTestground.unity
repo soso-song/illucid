@@ -1666,6 +1666,9 @@ MonoBehaviour:
   MinDistance: 5
   MaxDistance: 70
   DistanceTolerance: 0.1
+  cutterLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!64 &352570450
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2791,7 +2794,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &728573147
 Transform:
   m_ObjectHideFlags: 0
@@ -3230,9 +3233,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutters: []
-  cutterLayer:
-    serializedVersion: 2
-    m_Bits: 2048
 --- !u!1 &968408159
 GameObject:
   m_ObjectHideFlags: 0
@@ -4806,10 +4806,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1724867751}
+  - component: {fileID: 1724867752}
   - component: {fileID: 1724867754}
   - component: {fileID: 1724867755}
   - component: {fileID: 1724867753}
-  - component: {fileID: 1724867752}
   m_Layer: 11
   m_Name: CutterQ
   m_TagString: Untagged
@@ -4854,10 +4854,13 @@ MonoBehaviour:
   A: {x: 0, y: 0, z: 0}
   B: {x: 0, y: 0, z: 0}
   C: {x: 0, y: 0, z: 0}
-  LeftRightPointOffset: 2.5
+  LeftRightPointOffset: 0.2
   MinDistance: 5
   MaxDistance: 70
-  DistanceTolerance: 0.1
+  DistanceTolerance: 4
+  cutterLayer:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!64 &1724867753
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4870,7 +4873,7 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 30
+  m_CookingOptions: -1
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &1724867754
 MeshFilter:
@@ -5348,7 +5351,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1826707875

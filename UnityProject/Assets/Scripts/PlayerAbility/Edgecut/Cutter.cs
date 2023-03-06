@@ -14,10 +14,11 @@ public class Cutter : MonoBehaviour
     public Vector3 A;
     public Vector3 B;
     public Vector3 C;
-    public float LeftRightPointOffset = 2.5f;
+    public float LeftRightPointOffset = 0.2f;
     public float MinDistance = 5f;
     public float MaxDistance = 70f;
-    public float DistanceTolerance = 1.1f;
+    public float DistanceTolerance = 2f;
+    public LayerMask cutterLayer;
 
     Camera cam;
     GameObject TargetPoint, LeftPoint, RightPoint;
@@ -165,12 +166,12 @@ public class Cutter : MonoBehaviour
         // Vector3 closestPoint = A + projection;
     }
 
-    void CheckCutReady(){
+    public RaycastHit[] CheckCutReady(){
         // get the distance between Camera and TargetPoint
         midDistance = Vector3.Distance(C, TargetPoint.transform.position);
         RaycastHit hitL, hitR;
-        Physics.Raycast(C, LeftPoint.transform.position - C, out hitL, Mathf.Infinity);
-        Physics.Raycast(C, RightPoint.transform.position - C, out hitR, Mathf.Infinity);
+        Physics.Raycast(C, LeftPoint.transform.position - C, out hitL, Mathf.Infinity, cutterLayer);
+        Physics.Raycast(C, RightPoint.transform.position - C, out hitR, Mathf.Infinity, cutterLayer);
         leftDistance = Vector3.Distance(C, hitL.point);
         rightDistance = Vector3.Distance(C, hitR.point);
         // show the raycast
@@ -181,17 +182,22 @@ public class Cutter : MonoBehaviour
 
         // distance is infinity
         if (leftDistance == 0 || rightDistance == 0)
-            return;
+            return null;
         // difference is too small
         if (Mathf.Abs(leftDistance - rightDistance) < MinDistance)
-            return;
+            return null;
         if (Mathf.Abs(leftDistance - rightDistance) > MaxDistance)
-            return;
+            return null;
         // both side is not close to the targetPoint
         if(Mathf.Abs(leftDistance - midDistance) > DistanceTolerance && Mathf.Abs(rightDistance - midDistance) > DistanceTolerance)
-            return;
+            return null;
         
         isCutReady = true;
+
+        return new RaycastHit[] {
+            hitL,
+            hitR
+        };
     }
 
     void OnTriggerEnter(Collider collision)
