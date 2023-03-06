@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class Spawner
@@ -15,16 +16,26 @@ public class Spawner
 public class GapTrigger : MonoBehaviour
 {
     public Spawner[] spawners;
+    GameObject gameFlowControlObj;
+    GameFlowControl gameFlowControl;
+
+    void Start()
+    {
+        gameFlowControlObj = GameObject.Find("GameManager");
+        gameFlowControl = gameFlowControlObj.GetComponent<GameFlowControl>();
+    }
     
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
+            Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Room: " + gameFlowControl.curRoom + ", Player Fall");
             foreach (Spawner spawner in spawners)
             {
                 SpawnGameObject(spawner);
             }
         } else {
+            Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Room: " + gameFlowControl.curRoom + ", " + other.gameObject.name + " Fall");
             bool isSpawner = false;
             // check if the object has same name as the prefab in spawners
             foreach (Spawner spawner in spawners)

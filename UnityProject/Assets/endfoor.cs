@@ -1,16 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class endfoor : MonoBehaviour
 {
-    // Start is called before the first frame update
-
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -21,7 +15,7 @@ public class endfoor : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("You Win!");
+            Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Player wins");
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             // pause the game

@@ -70,12 +70,14 @@ public class IllusionManager : MonoBehaviour
             {
                 target = PickupController.RaycastFromCamera(targetMask);
                 if(target){
+                    Debug.Log("time: " + Time.time + ", pick up target: " + target.name);
                     PickupController.PickupTarget(target.transform.gameObject);
                     // target.GetComponent<Rigidbody>().isKinematic = true;
                 }
             }
             else // If we DO have a target
             {
+                Debug.Log("time: " + Time.time + ", drop target: " + target.name);
                 PickupController.DropTarget();
                 // target.GetComponent<Rigidbody>().isKinematic = false;
 

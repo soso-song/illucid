@@ -30,7 +30,6 @@ public class Typer : MonoBehaviour
     void LoadImage()
     {
         string filePath = dirPath+"/"+count.ToString();
-        Debug.Log(filePath);
         // check if resource exists
         tex = Resources.Load<Texture2D>(filePath);
 
@@ -38,7 +37,6 @@ public class Typer : MonoBehaviour
             tex = Resources.Load<Texture2D>(filePath);
             img.texture = tex;
         }else{
-            Debug.Log("next level");
             // load animation here
             GameFlowControl.LoadLevel();
         }
@@ -47,6 +45,7 @@ public class Typer : MonoBehaviour
     private void Update()
     {
         if(Input.anyKeyDown){
+            Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Player pressed : " + Input.inputString);
             int index = Random.Range(0, SoundFX.Length);
             SoundFX[index].Play();
             count++;
