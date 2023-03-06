@@ -26,6 +26,7 @@ public class ScreenControl : MonoBehaviour
     public void Open()
     {
         isOpen = true;
+        Debug.Log("Time: " + Time.time + "Screen Open");
         // Screen.Play("screen_open", 0, 0.0f);
         // move the y position of the current object
         // transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 2, transform.position.z), 2 * Time.deltaTime);

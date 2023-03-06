@@ -87,6 +87,7 @@ public class EmergencyButtonControl : MonoBehaviour
     // }
 
     void Pressed(){
+        Debug.Log("Time: " + Time.time + ", Button" + gameObject.name + " pressed");
         prevPressedState = isPressed;
         pressedSound.pitch = 1;
         pressedSound.Play();
@@ -99,6 +100,7 @@ public class EmergencyButtonControl : MonoBehaviour
     }
 
     void Released(){
+        Debug.Log("Time: " + Time.time + ", Button" + gameObject.name + " released");
         prevPressedState = isPressed;
         releasedSound.pitch = Random.Range(1.1f, 1.2f);
         releasedSound.Play();

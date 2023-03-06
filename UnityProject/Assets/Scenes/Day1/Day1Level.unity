@@ -815,6 +815,66 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &70410953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 70410954}
+  - component: {fileID: 70410956}
+  - component: {fileID: 70410955}
+  m_Layer: 0
+  m_Name: Room 5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &70410954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70410953}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.5632, y: 3.5632, z: 3.5632}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652907946591}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70410955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70410953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98d680fd5eac1401fb3b851b1f368bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameManager: {fileID: 0}
+  roomName: Room 5
+--- !u!65 &70410956
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70410953}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.19052, y: 4.4515905, z: 4.671872}
+  m_Center: {x: -2.072498, y: 1.7257954, z: 1.8359361}
 --- !u!1 &78900908
 GameObject:
   m_ObjectHideFlags: 0
@@ -8369,7 +8429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &841462455
 Transform:
   m_ObjectHideFlags: 0
@@ -9110,9 +9170,6 @@ MonoBehaviour:
   target: {fileID: 0}
   outline: {fileID: 0}
   holdDistance: 5
-  PickupController: {fileID: 963194231}
-  Superview: {fileID: 963194230}
-  deforming: 0
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16039,6 +16096,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask: {fileID: 0}
   maskPerfab: {fileID: 3906994128017517825, guid: 48cb42a3086a1824ab92f1a2865031ae, type: 3}
+  curRoom: room 0
 --- !u!64 &1776700023
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -19370,6 +19428,7 @@ Transform:
   - {fileID: 870620313}
   - {fileID: 894352226}
   - {fileID: 26462228}
+  - {fileID: 70410954}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21019,6 +21078,8 @@ GameObject:
   - component: {fileID: 4199734718190478623}
   - component: {fileID: 5181795617353334319}
   - component: {fileID: 887853266}
+  - component: {fileID: 5181795617353334321}
+  - component: {fileID: 5181795617353334320}
   m_Layer: 17
   m_Name: pCube19
   m_TagString: Untagged
@@ -21470,6 +21531,33 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5181795617353334320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4692605079066927163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98d680fd5eac1401fb3b851b1f368bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameManager: {fileID: 0}
+  roomName: Room 6
+--- !u!65 &5181795617353334321
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4692605079066927163}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.013067985, y: 0.017233226, z: 0.0063768653}
+  m_Center: {x: 0.002701878, y: 0.0105321575, z: 0.00097348675}
 --- !u!4 &5338447989478253549
 Transform:
   m_ObjectHideFlags: 0
