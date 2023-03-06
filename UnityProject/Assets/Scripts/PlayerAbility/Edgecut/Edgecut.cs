@@ -13,19 +13,43 @@ public class Edgecut : MonoBehaviour
     [Header("Parameters")]
     // public LayerMask cutterLayer;
     // public int cutterLayerInt;
+    public float maxEdgeDistance = 50f;
     float originalDistance;             // The original distance between the player playerCamera and the target
     float originalScale;                // The original scale of the target objects prior to being resized
     Vector3 targetScale;                // The scale we want our object to be set to each frame
     
+    public GameObject UpDownChecker;
     void Start()
     {
         // collect/remember all cutters
         cutters = FindCutters();
+        // create Quad game object called UpDownChecker
+        // UpDownChecker = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        // UpDownChecker.name = "UpDownChecker";
+        // make it a child of the player
 
+        // UpDownChecker.transform.parent = transform;
+        // UpDownChecker.transform.position = transform.position + new Vector3(0, 0, maxEdgeDistance/2);
+        // // make it scale same width with target
+        // UpDownChecker.transform.rotation = Quaternion.Euler(90, 0, 0);
+        // UpDownChecker.transform.localScale = new Vector3(maxEdgeDistance, maxEdgeDistance, 1);
+        
+        // disable mesh renderer
+        // UpDownChecker.GetComponent<MeshRenderer>().enabled = false;
+        // // disable collider
+        // UpDownChecker.GetComponent<Collider>().enabled = false;
+        // make collider trigger
+        // UpDownChecker.GetComponent<Collider>().isTrigger = true;
         // print cutterLayer.value
         // print cutters.Length;
         // print((int)cutterLayer.value);
     }
+    // void Update()
+    // {
+    //     // make updownchecker face camera
+    //     // UpDownChecker.transform.LookAt(transform.position);
+    //     // lock x rotation of updownchecker
+    // }
 
     public void CutTarget(Transform target){
         Cutter cutter = cutters[0];
@@ -51,7 +75,7 @@ public class Edgecut : MonoBehaviour
     
         // check target is intersect with cutter
         cutter.UpdateCutterTriangleOnce();
-        StartCoroutine(PauseOneFrame()); // wait one frame for cutter to run ontrigger functions since they reset collider.sharedMesh makes them weird
+        // StartCoroutine(PauseOneFrame()); // wait one frame for cutter to run ontrigger functions since they reset collider.sharedMesh makes them weird
         Debug.Log("-------------------");
         Debug.Log("isIntersectObject:" + cutter.isIntersectObject);
         if(!cutter.isIntersectObject){
@@ -155,13 +179,13 @@ public class Edgecut : MonoBehaviour
         return goList.ToArray();
     }
 
-    IEnumerator PauseOneFrame()
-    {
-        // Pause for one frame
-        yield return null;
+    // IEnumerator PauseOneFrame()
+    // {
+    //     // Pause for one frame
+    //     yield return null;
 
-        // Resume execution after one frame
-        Debug.Log("Resumed after one frame");
-    }
+    //     // Resume execution after one frame
+    //     Debug.Log("Resumed after one frame");
+    // }
 
 }

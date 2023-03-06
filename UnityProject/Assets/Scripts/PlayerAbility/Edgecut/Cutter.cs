@@ -8,6 +8,8 @@ public class Cutter : MonoBehaviour
     public float rightDistance;
     public bool isCutReady = false;
     public bool isIntersectObject = false;
+    public bool isUpDownIntersectObject = false;
+    public bool isLeftRightIntersectObject = false;
     // public bool isIntersectObjectStay = false;
 
     [Header("Parameters")]
@@ -15,20 +17,23 @@ public class Cutter : MonoBehaviour
     public Vector3 B;
     public Vector3 C;
     public float LeftRightPointOffset = 0.2f;
-    public float MinDistance = 5f;
-    public float MaxDistance = 70f;
-    public float DistanceTolerance = 2f;
+    public float MinDiff = 5f;
+    public float MaxDiff = 70f;
+    public float DiffTolerance = 2f;
     public LayerMask cutterLayer;
 
     Camera cam;
     GameObject TargetPoint, LeftPoint, RightPoint;
     Mesh mesh;
     MeshCollider CutterCollider;
+    // GameObject UpDownChecker;
+    Edgecut edgecut;
 
     void Start()
     {
         // use the inputs
         cam = Camera.main;
+        edgecut = cam.GetComponent<Edgecut>();
         A = transform.GetChild(0).transform.position;
         B = transform.GetChild(1).transform.position;
         C = cam.transform.position;
@@ -73,11 +78,17 @@ public class Cutter : MonoBehaviour
     {
         C = cam.transform.position;
 
-        // UpdateCutterTriangleOnce();
+        // UpdateCutterTriangleOnce(); // check left right intersection
 
-        UpdateTargetPoint();
+        UpdateTargetPoint(); // check up down intersection
 
-        CheckCutReady();
+        if(isLeftRightIntersectObject && isUpDownIntersectObject){
+            isIntersectObject = true;
+        } else {
+            isIntersectObject = false;
+        }
+
+        CheckCutReady(); // check object behind the cutter
 
         // CheckObjectIntersection();
 
@@ -150,9 +161,17 @@ public class Cutter : MonoBehaviour
     }
     void UpdateTargetPoint()
     {
-
-        TargetPoint.transform.position = (A + B) / 2;
+        Vector3 intersection = GetLinePlaneIntersection(A, B, edgecut.UpDownChecker);
+        TargetPoint.transform.position = intersection;
+        // TargetPoint.transform.position = GetComponent<MeshCollider>().ClosestPointOnBounds(transform.position);
         TargetPoint.transform.LookAt(C);
+
+        // check if the y position of TargetPoint is between A and B
+        if (intersection.y > A.y || intersection.y < B.y)
+        {
+            isUpDownIntersectObject = false;
+        }
+        isUpDownIntersectObject = true;
         // Vector3 dir = cam.transform.forward;
     
         // // Calculate the line vector and distance between the line and the ray
@@ -164,6 +183,30 @@ public class Cutter : MonoBehaviour
         // Vector3 CA = A - C;
         // Vector3 projection = Vector3.Dot(CA, AB) / Vector3.Dot(AB, AB) * AB;
         // Vector3 closestPoint = A + projection;
+    }
+    public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B, GameObject planeObject)
+    {
+        // Get the plane's normal and distance
+        // Plane plane = new Plane(planeObject.transform.up, planeObject.transform.position);
+        // Vector3 AB = B - A;
+        // float t = - (plane.normal.x * A.x + plane.normal.y * A.y + plane.normal.z * A.z + plane.distance)
+        //     / (plane.normal.x * AB.x + plane.normal.y * AB.y + plane.normal.z * AB.z);
+        // Vector3 P = A + t * AB;
+        // return P;
+        Vector3 n = cam.transform.up;
+        Vector3 pos = cam.transform.position;
+        Vector3 d = B - A;
+        float t = Vector3.Dot(n, pos - A) / Vector3.Dot(n, d);
+
+        if (float.IsNaN(t) || float.IsInfinity(t))
+        {
+            // The line AB is parallel to the plane, return a default value.
+            return Vector3.zero;
+        }
+
+        Vector3 P = A + t * d;
+
+        return P; 
     }
 
     public RaycastHit[] CheckCutReady(){
@@ -184,12 +227,12 @@ public class Cutter : MonoBehaviour
         if (leftDistance == 0 || rightDistance == 0)
             return null;
         // difference is too small
-        if (Mathf.Abs(leftDistance - rightDistance) < MinDistance)
+        if (Mathf.Abs(leftDistance - rightDistance) < MinDiff)
             return null;
-        if (Mathf.Abs(leftDistance - rightDistance) > MaxDistance)
+        if (Mathf.Abs(leftDistance - rightDistance) > MaxDiff)
             return null;
         // both side is not close to the targetPoint
-        if(Mathf.Abs(leftDistance - midDistance) > DistanceTolerance && Mathf.Abs(rightDistance - midDistance) > DistanceTolerance)
+        if(Mathf.Abs(leftDistance - midDistance) > DiffTolerance && Mathf.Abs(rightDistance - midDistance) > DiffTolerance)
             return null;
         
         isCutReady = true;
@@ -206,6 +249,9 @@ public class Cutter : MonoBehaviour
         // {
             // Debug.Log("Collider is colliding with MyOtherObject");
             isIntersectObject = true;
+            // get the intersection point
+            // Vector3 intersectionPoint = collision.ClosestPointOnBounds(transform.position);
+            // TargetPoint.transform.position = intersectionPoint;
         // }
     }
     void OnTriggerExit(Collider collision)
