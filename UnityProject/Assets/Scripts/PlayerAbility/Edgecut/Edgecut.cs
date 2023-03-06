@@ -1,6 +1,7 @@
 using UnityEngine;
 using Assets.Scripts; // to access Slicer
 using System.Collections.Generic;
+using System.Collections;
 
 public class Edgecut : MonoBehaviour
 {
@@ -40,16 +41,17 @@ public class Edgecut : MonoBehaviour
         Vector3 transformedStartingPoint = target.transform.InverseTransformPoint(pos1);
         Plane cutterNRPlane = new Plane();
         cutterNRPlane.SetNormalAndPosition(
-            transformedNormal, 
+            transformedNormal,
             transformedStartingPoint
         );
         if(transformedNormal.x<0 || transformedNormal.y<0){
             cutterNRPlane = cutterNRPlane.flipped;
         }
 
-
-        // cutter.UpdateCutterTriangleOnce();
-        // print(cutter.isIntersectObject);
+    
+        cutter.UpdateCutterTriangleOnce();
+        StartCoroutine(PauseOneFrame()); // wait one frame for cutter to run ontrigger functions since they reset collider.sharedMesh makes them weird
+        print(cutter.isIntersectObject);
         // if(cutter.isIntersectObject){
             
         // }
@@ -135,6 +137,15 @@ public class Edgecut : MonoBehaviour
             return null;
         }
         return goList.ToArray();
+    }
+
+    IEnumerator PauseOneFrame()
+    {
+        // Pause for one frame
+        yield return null;
+
+        // Resume execution after one frame
+        Debug.Log("Resumed after one frame");
     }
 
 }
