@@ -51,9 +51,24 @@ public class Edgecut : MonoBehaviour
     //     // lock x rotation of updownchecker
     // }
 
-    public void CutTarget(Transform target){
-        Cutter cutter = cutters[0];
+    Cutter findBestCutter(){
+        // create a list of cutters
+        Cutter bestCutter = null;
+        foreach(Cutter cutter in cutters){
+            if(cutter.isIntersectObject && cutter.isCutReady){
+                if(bestCutter == null)
+                    bestCutter = cutter;
+                else if(cutter.distance < bestCutter.distance)
+                    bestCutter = cutter;
+            }
+        }
+        return bestCutter;
+    }
 
+    public void CutTarget(Transform target){
+        Cutter cutter = findBestCutter();
+        if(cutter == null)
+            return;
         // long cut method
         Vector3 pos1 = cutter.A; //cutterN.transform.Find("PivotR").gameObject.transform.position;
         Vector3 pos2 = cutter.B; //cutterN.transform.Find("PivotR").gameObject.transform.position + new Vector3(0, 3, 0);
@@ -118,10 +133,17 @@ public class Edgecut : MonoBehaviour
         originalScale = 1;
         targetScale = new Vector3(1, 1, 1);
 
-        // cutter.GetLeftRightCutter();
-        ResizeTarget(slices[1].transform, hits[0], originalDistance, originalScale, targetScale); // right side
+        if(!cutter.isVertical){
+            ResizeTarget(slices[1].transform, hits[1], originalDistance, originalScale, targetScale); // right side
         // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
-        ResizeTarget(slices[0].transform, hits[1], originalDistance, originalScale, targetScale); // left side
+            ResizeTarget(slices[0].transform, hits[0], originalDistance, originalScale, targetScale); // left side
+        }else{
+             // cutter.GetLeftRightCutter();
+            ResizeTarget(slices[1].transform, hits[0], originalDistance, originalScale, targetScale); // right side
+            // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
+            ResizeTarget(slices[0].transform, hits[1], originalDistance, originalScale, targetScale); // left side
+        }
+       
         // cutterN.transform.localScale -= new Vector3(0.1f, 0, 0);
     }
 

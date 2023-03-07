@@ -11,7 +11,11 @@ public class Cutter : MonoBehaviour
     public bool isUpDownIntersectObject = false;
     public bool isLeftRightIntersectObject = false;
     // public bool isIntersectObjectStay = false;
-    public float slope = 0.5f;
+    // public float slope = 0.5f;
+    public float distance;
+
+    public bool isVertical = true; 
+
 
     [Header("Parameters")]
     public Vector3 A;
@@ -73,7 +77,7 @@ public class Cutter : MonoBehaviour
         pivot = new GameObject("Pivot");
         pivot.transform.parent = transform;
         IntersectPlane = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        // IntersectPlane.GetComponent<Renderer>().enabled = false;
+        IntersectPlane.GetComponent<Renderer>().enabled = false;
         Destroy(IntersectPlane.GetComponent<MeshCollider>());
         IntersectPlane.AddComponent<BoxCollider>();
         IntersectPlane.GetComponent<BoxCollider>().isTrigger = true;
@@ -98,6 +102,8 @@ public class Cutter : MonoBehaviour
         A = ATransform.position;
         B = BTransform.position;
         C = cam.transform.position;
+        // make distance = TargetPoint - cam
+        distance = Vector3.Distance(TargetPoint.transform.position, C);
 
         // check left right intersection (supports rotation)
         UpdateCutterTriangleOnce();
@@ -124,6 +130,14 @@ public class Cutter : MonoBehaviour
     }
     void UpdateTargetPoint()
     {
+        // Vector3 cameraForward = cam.transform.forward;
+
+        // // Calculate the direction of the line between point A and point B
+        // Vector3 lineDirection = B - A;
+
+        // // Calculate the closest point on the line between A and B to the camera position
+        // Vector3 intersection = ClosestPointOnLine(A, lineDirection, C);
+
         Vector3 intersection = GetLinePlaneIntersection(A, B);
         TargetPoint.transform.position = intersection;
         TargetPoint.transform.LookAt(C, A-B); // A-B is up direction
@@ -132,10 +146,27 @@ public class Cutter : MonoBehaviour
         isUpDownIntersectObject = IsIntersectionBetweenAB(intersection);
     }
 
+    // Vector3 ClosestPointOnLine(Vector3 linePoint, Vector3 lineDirection, Vector3 point)
+    // {
+
+    //     // Calculate the vector from the line point to the given point
+    //     Vector3 pointVector = point - linePoint;
+
+    //     // Calculate the scalar projection of the point vector onto the line direction
+    //     float scalarProjection = Vector3.Dot(pointVector, lineDirection) / lineDirection.sqrMagnitude;
+
+    //     // Calculate the closest point on the line to the given point
+    //     Vector3 closestPoint = linePoint + scalarProjection * lineDirection;
+
+    //     return closestPoint;
+    // }
 
     public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B)
     {
         Vector3 n = cam.transform.up;
+        if(!isVertical){
+            n = cam.transform.right;
+        }
         // Vector3 n = Vector3.Cross(B-A, cam.transform.up).normalized;
         // Vector3 pos = cam.transform.position;
         Vector3 d = B - A;
@@ -186,6 +217,13 @@ public class Cutter : MonoBehaviour
 
         isCutReady = false;
 
+        if(!isVertical){
+            // change value between left
+            float temp;
+            temp = rightDistance;
+            rightDistance = leftDistance;
+            leftDistance = temp;
+        }
         // distance is infinity
         if (leftDistance == 0 || rightDistance == 0)
             return null;
