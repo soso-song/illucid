@@ -80,7 +80,7 @@ public class Cutter : MonoBehaviour
 
         // UpdateCutterTriangleOnce(); // check left right intersection
 
-        UpdateTargetPoint(); // check up down intersection
+        UpdateTargetPoint(); // check up down intersection (supports rotation)
 
         if(isLeftRightIntersectObject && isUpDownIntersectObject){
             isIntersectObject = true;
@@ -161,17 +161,18 @@ public class Cutter : MonoBehaviour
     }
     void UpdateTargetPoint()
     {
-        Vector3 intersection = GetLinePlaneIntersection(A, B, edgecut.UpDownChecker);
+        Vector3 intersection = GetLinePlaneIntersection(A, B);
         TargetPoint.transform.position = intersection;
         // TargetPoint.transform.position = GetComponent<MeshCollider>().ClosestPointOnBounds(transform.position);
         TargetPoint.transform.LookAt(C);
 
         // check if the y position of TargetPoint is between A and B
-        if (intersection.y > A.y || intersection.y < B.y)
-        {
-            isUpDownIntersectObject = false;
-        }
-        isUpDownIntersectObject = true;
+        isUpDownIntersectObject = IsIntersectionBetweenAB(intersection);
+        // if (intersection.y > A.y || intersection.y < B.y)
+        // {
+        //     isUpDownIntersectObject = false;
+        // }
+        // isUpDownIntersectObject = true;
         // Vector3 dir = cam.transform.forward;
     
         // // Calculate the line vector and distance between the line and the ray
@@ -184,7 +185,7 @@ public class Cutter : MonoBehaviour
         // Vector3 projection = Vector3.Dot(CA, AB) / Vector3.Dot(AB, AB) * AB;
         // Vector3 closestPoint = A + projection;
     }
-    public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B, GameObject planeObject)
+    public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B)
     {
         // Get the plane's normal and distance
         // Plane plane = new Plane(planeObject.transform.up, planeObject.transform.position);
@@ -207,6 +208,26 @@ public class Cutter : MonoBehaviour
         Vector3 P = A + t * d;
 
         return P; 
+    }
+    public bool IsIntersectionBetweenAB(Vector3 intersection)
+    {
+        Vector3 AB = B - A;
+        Vector3 AC = intersection - A;
+        Vector3 BC = intersection - B;
+
+        float dotABAC = Vector3.Dot(AB, AC);
+        float dotABBC = Vector3.Dot(AB, BC);
+
+        if (dotABAC >= 0f && dotABBC <= 0f)
+        {
+            // C is between A and B.
+            return true;
+        }
+        else
+        {
+            // C is not between A and B.
+            return false;
+        }
     }
 
     public RaycastHit[] CheckCutReady(){

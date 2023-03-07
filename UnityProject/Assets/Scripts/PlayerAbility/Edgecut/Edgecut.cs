@@ -13,7 +13,7 @@ public class Edgecut : MonoBehaviour
     [Header("Parameters")]
     // public LayerMask cutterLayer;
     // public int cutterLayerInt;
-    public float maxEdgeDistance = 50f;
+    // public float maxEdgeDistance = 50f;
     float originalDistance;             // The original distance between the player playerCamera and the target
     float originalScale;                // The original scale of the target objects prior to being resized
     Vector3 targetScale;                // The scale we want our object to be set to each frame
