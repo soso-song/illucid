@@ -103,6 +103,12 @@ public class Edgecut : MonoBehaviour
         // Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
         slices[0].GetComponent<Rigidbody>().isKinematic = true;
         slices[1].GetComponent<Rigidbody>().isKinematic = true;
+        // make slices to cutable layer
+        slices[0].layer = 12;
+        slices[1].layer = 12;
+        // add targetController to slices
+        slices[0].AddComponent<TargetController>();
+        slices[1].AddComponent<TargetController>();
 
         // resizeTarget
         // Vector3 nearEdgeDirection = cutterN.transform.Find("PivotR").gameObject.transform.position - cutterN.transform.Find("PivotL").gameObject.transform.position;

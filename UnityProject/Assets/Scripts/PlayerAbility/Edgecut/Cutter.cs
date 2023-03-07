@@ -126,7 +126,6 @@ public class Cutter : MonoBehaviour
     {
         Vector3 intersection = GetLinePlaneIntersection(A, B);
         TargetPoint.transform.position = intersection;
-
         TargetPoint.transform.LookAt(C, A-B); // A-B is up direction
 
         // check if the y position of TargetPoint is between A and B
@@ -137,9 +136,10 @@ public class Cutter : MonoBehaviour
     public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B)
     {
         Vector3 n = cam.transform.up;
-        Vector3 pos = cam.transform.position;
+        // Vector3 n = Vector3.Cross(B-A, cam.transform.up).normalized;
+        // Vector3 pos = cam.transform.position;
         Vector3 d = B - A;
-        float t = Vector3.Dot(n, pos - A) / Vector3.Dot(n, d);
+        float t = Vector3.Dot(n, C - A) / Vector3.Dot(n, d);
 
         if (float.IsNaN(t) || float.IsInfinity(t))
         {
