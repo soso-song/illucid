@@ -11,6 +11,7 @@ public class Cutter : MonoBehaviour
     public bool isUpDownIntersectObject = false;
     public bool isLeftRightIntersectObject = false;
     // public bool isIntersectObjectStay = false;
+    public float slope = 0.5f;
 
     [Header("Parameters")]
     public Vector3 A;
@@ -29,6 +30,9 @@ public class Cutter : MonoBehaviour
     // GameObject UpDownChecker;
     Edgecut edgecut;
 
+    // efficient storage
+    // private Vector3 AB;
+
     void Start()
     {
         // use the inputs
@@ -38,10 +42,6 @@ public class Cutter : MonoBehaviour
         B = transform.GetChild(1).transform.position;
         C = cam.transform.position;
 
-        // create the mesh
-       
-        // mesh.vertices = new Vector3[] {A, B, C, C+C};
-        // mesh.triangles =  new int[] {0, 1, 2, 2, 3, 0};
 
         // create the TargetPoint, LeftPoint and RightPoint
         TargetPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -54,6 +54,9 @@ public class Cutter : MonoBehaviour
         TargetPoint.name = "TargetPoint";
         LeftPoint.name = "LeftPoint";
         RightPoint.name = "RightPoint";
+
+        // slope = 0.5f;
+        // UpdateLeftRightPoint();
         LeftPoint.transform.position = new Vector3(LeftRightPointOffset,0,0);
         RightPoint.transform.position = new Vector3(-LeftRightPointOffset,0,0);
         LeftPoint.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
@@ -63,24 +66,40 @@ public class Cutter : MonoBehaviour
         RightPoint.transform.parent = TargetPoint.transform;
         TargetPoint.transform.parent = transform;
 
-        // set the position of TargetPoints
-        // TargetPoint.transform.position = (A + B) / 2; // will use cam.transform.forward
-        // mesh = new Mesh();
-        // CutterCollider = gameObject.GetComponent<MeshCollider>();
+        // efficient storage
+        // AB = B - A;
+    }
 
-        // mesh.vertices = new Vector3[] {A, B, C, C + new Vector3(0,15,0)};
-        // mesh.triangles =  new int[] {0, 3, 1, 3, 0, 2};
-        // CutterCollider.sharedMesh = mesh;
+    Vector2 FindOrthogonalPoint(Vector2 pointA, Vector2 pointB, float d, float slope) {
+
+        // Calculate the slope of line AB
+        // float slope = (pointB.y - pointA.y) / (pointB.x - pointA.x);
         
+        // Calculate the negative reciprocal of the slope to get the slope of a line perpendicular to AB
+        float perpendicularSlope = -1f / slope;
+        
+        // Calculate the x-coordinate of the point that is d distance away from point A
+        float x = (d / Mathf.Sqrt(1f + perpendicularSlope * perpendicularSlope));
+        
+        // Calculate the y-coordinate of the point using the equation of the line that is perpendicular to AB and passes through point A
+        float y = perpendicularSlope * x;
+        
+        // Return the resulting point as a Vector2
+        return new Vector2(x, y);
     }
 
     void Update()
     {
+        A = transform.GetChild(0).transform.position;
+        B = transform.GetChild(1).transform.position;
         C = cam.transform.position;
 
-        // UpdateCutterTriangleOnce(); // check left right intersection
+        // check left right intersection
+        UpdateCutterTriangleOnce(); 
 
-        UpdateTargetPoint(); // check up down intersection (supports rotation)
+        // check up down intersection (supports rotation)
+        // update CutReady Point position (supports rotation)
+        UpdateTargetPoint(); 
 
         if(isLeftRightIntersectObject && isUpDownIntersectObject){
             isIntersectObject = true;
@@ -88,18 +107,8 @@ public class Cutter : MonoBehaviour
             isIntersectObject = false;
         }
 
-        CheckCutReady(); // check object behind the cutter
-
-        // CheckObjectIntersection();
-
-
-        // if (isIntersectObjectStay){
-        //     isIntersectObject=true;
-        //     isIntersectObjectStay=false;
-        // } else {
-        //     isIntersectObject=false;
-        // }
-        
+        // check object behind the cutter
+        CheckCutReady(); 
     }
 
     
@@ -133,67 +142,21 @@ public class Cutter : MonoBehaviour
         GetComponent<MeshCollider>().sharedMesh = mesh;
         // isIntersectObject = false;
         
-        // mesh.RecalculateBounds();
-        // mesh.RecalculateNormals();
-        // MeshCollider meshCollider = GetComponent<MeshCollider>();
-        // meshCollider.
-
-
-        // Vector3[] vertices = mesh.vertices;
-        // vertices[2] = C;
-        // // mesh.vertices = new Vector3[] {A, B, C, C + new Vector3(0,15,0)};
-        // // mesh.triangles =  new int[] {0, 3, 1, 3, 0, 2};
-        // CutterCollider.sharedMesh.vertices = vertices;
-        // // mesh = CutterCollider.sharedMesh;
-        // // could only update when release the object
-        // CutterCollider.sharedMesh.RecalculateBounds();
-
-        
-        // // Vector3[] normals = mesh.normals;
-
-        // // for (var i = 0; i < vertices.Length; i++)
-        // // {
-        // //     vertices[i] += normals[i] * Mathf.Sin(Time.time);
-        // // }
-
-        // // mesh.vertices = vertices;
-        // // CutterCollider.sharedMesh = mesh;
     }
     void UpdateTargetPoint()
     {
         Vector3 intersection = GetLinePlaneIntersection(A, B);
         TargetPoint.transform.position = intersection;
-        // TargetPoint.transform.position = GetComponent<MeshCollider>().ClosestPointOnBounds(transform.position);
-        TargetPoint.transform.LookAt(C);
+
+        TargetPoint.transform.LookAt(C, A-B); // A-B is up direction
 
         // check if the y position of TargetPoint is between A and B
         isUpDownIntersectObject = IsIntersectionBetweenAB(intersection);
-        // if (intersection.y > A.y || intersection.y < B.y)
-        // {
-        //     isUpDownIntersectObject = false;
-        // }
-        // isUpDownIntersectObject = true;
-        // Vector3 dir = cam.transform.forward;
-    
-        // // Calculate the line vector and distance between the line and the ray
-        // Vector3 AB = B - A;
-        // Vector3 cross = Vector3.Cross(AB, dir);
-        // float distance = Vector3.Magnitude(cross) / Vector3.Magnitude(dir);
-
-        // // Calculate the intersection point
-        // Vector3 CA = A - C;
-        // Vector3 projection = Vector3.Dot(CA, AB) / Vector3.Dot(AB, AB) * AB;
-        // Vector3 closestPoint = A + projection;
     }
+
+
     public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B)
     {
-        // Get the plane's normal and distance
-        // Plane plane = new Plane(planeObject.transform.up, planeObject.transform.position);
-        // Vector3 AB = B - A;
-        // float t = - (plane.normal.x * A.x + plane.normal.y * A.y + plane.normal.z * A.z + plane.distance)
-        //     / (plane.normal.x * AB.x + plane.normal.y * AB.y + plane.normal.z * AB.z);
-        // Vector3 P = A + t * AB;
-        // return P;
         Vector3 n = cam.transform.up;
         Vector3 pos = cam.transform.position;
         Vector3 d = B - A;
@@ -283,12 +246,4 @@ public class Cutter : MonoBehaviour
             isIntersectObject = false;
         // }
     }
-    // void OnTriggerStay(Collider collision)
-    // {      
-    //     if (collision.gameObject.transform.parent.name == "HoldArea")
-    //     {
-    //         // Debug.Log("Collider is colliding with MyOtherObject");
-    //         isIntersectObject = true;
-    //     }
-    // }
 }
