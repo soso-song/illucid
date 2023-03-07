@@ -18,7 +18,7 @@ public class Edgecut : MonoBehaviour
     float originalScale;                // The original scale of the target objects prior to being resized
     Vector3 targetScale;                // The scale we want our object to be set to each frame
     
-    public GameObject UpDownChecker;
+    // public GameObject UpDownChecker;
     void Start()
     {
         // collect/remember all cutters
@@ -74,18 +74,18 @@ public class Edgecut : MonoBehaviour
 
     
         // check target is intersect with cutter
-        cutter.UpdateCutterTriangleOnce();
+        // cutter.UpdateCutterTriangleOnce();
         // StartCoroutine(PauseOneFrame()); // wait one frame for cutter to run ontrigger functions since they reset collider.sharedMesh makes them weird
-        Debug.Log("-------------------");
-        Debug.Log("isIntersectObject:" + cutter.isIntersectObject);
+        // Debug.Log("-------------------");
+        // Debug.Log("isIntersectObject:" + cutter.isIntersectObject);
         if(!cutter.isIntersectObject){
             return;
         }
 
         // check two sides of cutter
         RaycastHit[] hits = cutter.CheckCutReady();
-        Debug.Log("isCutReady:" + cutter.isCutReady);
-        if(hits ==  null || hits.Length != 2){
+        // Debug.Log("isCutReady:" + cutter.isCutReady);
+        if(!cutter.isCutReady || hits ==  null || hits.Length != 2){
             return;
         }
     

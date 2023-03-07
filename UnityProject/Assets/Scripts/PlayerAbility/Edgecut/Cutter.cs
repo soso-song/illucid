@@ -29,34 +29,37 @@ public class Cutter : MonoBehaviour
     MeshCollider CutterCollider;
     // GameObject UpDownChecker;
     Edgecut edgecut;
+    Transform ATransform, BTransform;
 
     // efficient storage
     // private Vector3 AB;
+    GameObject pivot;
+    GameObject IntersectPlane;
 
     void Start()
     {
         // use the inputs
         cam = Camera.main;
         edgecut = cam.GetComponent<Edgecut>();
-        A = transform.GetChild(0).transform.position;
-        B = transform.GetChild(1).transform.position;
+        ATransform = transform.Find("A").transform;
+        // A = transform.GetChild(0).transform.position;
+        BTransform = transform.Find("B").transform;
+
+        A = ATransform.position;
+        B = BTransform.position;
         C = cam.transform.position;
 
-
         // create the TargetPoint, LeftPoint and RightPoint
+        // check isUpDownIntersectObject, isCutReady
         TargetPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         LeftPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         RightPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        // disable the collider
         TargetPoint.GetComponent<Collider>().enabled = false;
         LeftPoint.GetComponent<Collider>().enabled = false;
         RightPoint.GetComponent<Collider>().enabled = false;
         TargetPoint.name = "TargetPoint";
         LeftPoint.name = "LeftPoint";
         RightPoint.name = "RightPoint";
-
-        // slope = 0.5f;
-        // UpdateLeftRightPoint();
         LeftPoint.transform.position = new Vector3(LeftRightPointOffset,0,0);
         RightPoint.transform.position = new Vector3(-LeftRightPointOffset,0,0);
         LeftPoint.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
@@ -66,36 +69,38 @@ public class Cutter : MonoBehaviour
         RightPoint.transform.parent = TargetPoint.transform;
         TargetPoint.transform.parent = transform;
 
+        // check isLeftRightIntersectObject
+        pivot = new GameObject("Pivot");
+        pivot.transform.parent = transform;
+        IntersectPlane = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        // IntersectPlane.GetComponent<Renderer>().enabled = false;
+        Destroy(IntersectPlane.GetComponent<MeshCollider>());
+        IntersectPlane.AddComponent<BoxCollider>();
+        IntersectPlane.GetComponent<BoxCollider>().isTrigger = true;
+
+        IntersectPlane.transform.parent = pivot.transform;
+        float height = Vector3.Distance(A, B);
+        pivot.transform.position = transform.position;
+        IntersectPlane.transform.localPosition = new Vector3(-0.5f, 0, 0);
+        IntersectPlane.transform.localScale = new Vector3(1, height, 0.01f); // 0.01 is the z scale for collider
+        // attach the IntersectPlane script to the IntersectPlane
+        // change the layer to "MathObj"
+        IntersectPlane.layer = 20;
+        IntersectPlane.AddComponent<IntersectPlane>();
+        // IntersectPlane.transform.Rotate(90, 0, 0);
+        
         // efficient storage
         // AB = B - A;
     }
 
-    Vector2 FindOrthogonalPoint(Vector2 pointA, Vector2 pointB, float d, float slope) {
-
-        // Calculate the slope of line AB
-        // float slope = (pointB.y - pointA.y) / (pointB.x - pointA.x);
-        
-        // Calculate the negative reciprocal of the slope to get the slope of a line perpendicular to AB
-        float perpendicularSlope = -1f / slope;
-        
-        // Calculate the x-coordinate of the point that is d distance away from point A
-        float x = (d / Mathf.Sqrt(1f + perpendicularSlope * perpendicularSlope));
-        
-        // Calculate the y-coordinate of the point using the equation of the line that is perpendicular to AB and passes through point A
-        float y = perpendicularSlope * x;
-        
-        // Return the resulting point as a Vector2
-        return new Vector2(x, y);
-    }
-
     void Update()
     {
-        A = transform.GetChild(0).transform.position;
-        B = transform.GetChild(1).transform.position;
+        A = ATransform.position;
+        B = BTransform.position;
         C = cam.transform.position;
 
-        // check left right intersection
-        UpdateCutterTriangleOnce(); 
+        // check left right intersection (supports rotation)
+        UpdateCutterTriangleOnce();
 
         // check up down intersection (supports rotation)
         // update CutReady Point position (supports rotation)
@@ -111,37 +116,11 @@ public class Cutter : MonoBehaviour
         CheckCutReady(); 
     }
 
-    
-    // void OnCollisionExit(Collision collision)
-    // {
-    //     if (collision.gameObject.transform.parent.name == "HoldArea")
-    //     {
-    //         IntersectObject = false;
-    //     }
-    // }
-
     public void UpdateCutterTriangleOnce()
     {
-        // 2   3
-        //   /
-        // 0   1
-
-        // isIntersectObject = false;
-
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
-        Vector3[] vertices = mesh.vertices;
-        // Vector3[] normals = mesh.normals;
-        vertices[0] = C;
-        vertices[1] = B;
-        vertices[2] = C + new Vector3(0.1f,0.1f,0.1f);
-        vertices[3] = A;
-        mesh.vertices = vertices;
-
-        GetComponent<MeshCollider>().sharedMesh = null;
-        // isIntersectObject = false;
-        GetComponent<MeshCollider>().sharedMesh = mesh;
-        // isIntersectObject = false;
-        
+        pivot.transform.LookAt(cam.transform.position, A-B);
+        pivot.transform.Rotate(0, 90, 0);
+        pivot.transform.localScale = new Vector3(Vector3.Distance(cam.transform.position, pivot.transform.position), 1, 1);
     }
     void UpdateTargetPoint()
     {
