@@ -13,12 +13,12 @@ public class Pause : MonoBehaviour
     }
 
     void Update(){
-        // if (Input.GetMouseButtonDown(0)){
+        if (Input.GetKeyDown(KeyCode.Escape)){
             pause.SetActive(true);
             Time.timeScale = 0f;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-        // }
+        }
     }
     
     public void Resume(){

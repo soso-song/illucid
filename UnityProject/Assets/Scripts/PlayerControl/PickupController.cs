@@ -6,7 +6,7 @@ public class PickupController : MonoBehaviour
 {
     [Header("Pickup Settings")]
     [SerializeField] Transform holdArea;
-    private GameObject target;
+    public GameObject target;
     private Rigidbody targetRb;
 
     [Header("Physics Parameters")]
