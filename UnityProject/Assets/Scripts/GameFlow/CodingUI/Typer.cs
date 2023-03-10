@@ -45,7 +45,7 @@ public class Typer : MonoBehaviour
     private void Update()
     {
         if(Input.anyKeyDown){
-            Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Player pressed : " + Input.inputString);
+            // Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Player pressed : " + Input.inputString);
             int index = Random.Range(0, SoundFX.Length);
             SoundFX[index].Play();
             count++;

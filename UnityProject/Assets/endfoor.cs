@@ -15,7 +15,7 @@ public class endfoor : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Player wins");
+            // Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Player wins");
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             // pause the game

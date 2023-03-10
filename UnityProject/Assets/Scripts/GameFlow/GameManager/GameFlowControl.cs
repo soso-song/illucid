@@ -17,7 +17,7 @@ public class GameFlowControl : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Level Start");
+        // Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Level Start");
         // play open eye animation-
         if (mask == null){
             if (GameObject.Find("Mask") == null){
@@ -48,7 +48,7 @@ public class GameFlowControl : MonoBehaviour
     public void LoadLevel()
     {
         StartCoroutine(playBlinkAnimation("CloseEyeAnim"));
-        Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Level End");
+        // Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Level End");
         isloading = true;
     }
 

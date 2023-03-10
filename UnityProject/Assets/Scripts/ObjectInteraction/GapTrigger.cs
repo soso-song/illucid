@@ -29,13 +29,13 @@ public class GapTrigger : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Room: " + gameFlowControl.curRoom + ", Player Fall");
+            // Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Room: " + gameFlowControl.curRoom + ", Player Fall");
             foreach (Spawner spawner in spawners)
             {
                 SpawnGameObject(spawner);
             }
         } else {
-            Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Room: " + gameFlowControl.curRoom + ", " + other.gameObject.name + " Fall");
+            // Debug.Log("Time: " + Time.time + ", Level: " + SceneManager.GetActiveScene().buildIndex + ", Room: " + gameFlowControl.curRoom + ", " + other.gameObject.name + " Fall");
             bool isSpawner = false;
             // check if the object has same name as the prefab in spawners
             foreach (Spawner spawner in spawners)

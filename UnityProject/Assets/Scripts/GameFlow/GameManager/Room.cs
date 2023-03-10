@@ -23,7 +23,7 @@ public class Room : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             gameFlowControl.curRoom = roomName;
-            Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Room: "+gameFlowControl.curRoom);
+            // Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Room: "+gameFlowControl.curRoom);
         }
     }
 }
