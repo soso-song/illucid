@@ -14,7 +14,7 @@ public class Cutter : MonoBehaviour
     // public float slope = 0.5f;
     public float distance;
 
-    public bool isVertical = true; 
+    // public bool isVertical = true; 
 
 
     [Header("Parameters")]
@@ -124,7 +124,7 @@ public class Cutter : MonoBehaviour
 
     public void UpdateCutterTriangleOnce()
     {
-        pivot.transform.LookAt(cam.transform.position, A-B);
+        pivot.transform.LookAt(cam.transform.position, B-A);
         pivot.transform.Rotate(0, 90, 0);
         pivot.transform.localScale = new Vector3(Vector3.Distance(cam.transform.position, pivot.transform.position), 1, 1);
     }
@@ -140,7 +140,7 @@ public class Cutter : MonoBehaviour
 
         Vector3 intersection = GetLinePlaneIntersection(A, B);
         TargetPoint.transform.position = intersection;
-        TargetPoint.transform.LookAt(C, A-B); // A-B is up direction
+        TargetPoint.transform.LookAt(C, B-A); // A-B is up direction
 
         // check if the y position of TargetPoint is between A and B
         isUpDownIntersectObject = IsIntersectionBetweenAB(intersection);
@@ -163,10 +163,17 @@ public class Cutter : MonoBehaviour
 
     public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B)
     {
-        Vector3 n = cam.transform.up;
-        if(!isVertical){
-            n = cam.transform.right;
-        }
+        // Vector3 n = cam.transform.up;
+        // rotate the normal 
+        Vector3 n = cam.transform.rotation * (B-A).normalized;
+        // print n
+        // print(n);
+        // draw debug that shows a plane with normal n
+        // DebugOnDrawGizmos(n);
+
+        // if(!isVertical){
+        //     n = cam.transform.right;
+        // }
         // Vector3 n = Vector3.Cross(B-A, cam.transform.up).normalized;
         // Vector3 pos = cam.transform.position;
         Vector3 d = B - A;
@@ -182,6 +189,15 @@ public class Cutter : MonoBehaviour
 
         return P; 
     }
+    // private void DebugOnDrawGizmos(Vector3 planeNormal)
+    // {
+    //     // Set the length of the debug lines
+    //     float length = 5.0f;
+
+    //     // Draw the two lines that form the plane
+    //     Debug.DrawRay(transform.position, Quaternion.AngleAxis(90.0f, planeNormal) * transform.up * length, Color.red);
+    //     Debug.DrawRay(transform.position, Quaternion.AngleAxis(90.0f, planeNormal) * transform.right * length, Color.green);
+    // }
     public bool IsIntersectionBetweenAB(Vector3 intersection)
     {
         Vector3 AB = B - A;
@@ -217,13 +233,13 @@ public class Cutter : MonoBehaviour
 
         isCutReady = false;
 
-        if(!isVertical){
-            // change value between left
-            float temp;
-            temp = rightDistance;
-            rightDistance = leftDistance;
-            leftDistance = temp;
-        }
+        // if(!isVertical){
+        //     // change value between left
+        //     float temp;
+        //     temp = rightDistance;
+        //     rightDistance = leftDistance;
+        //     leftDistance = temp;
+        // }
         // distance is infinity
         if (leftDistance == 0 || rightDistance == 0)
             return null;

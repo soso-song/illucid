@@ -23,33 +23,7 @@ public class Edgecut : MonoBehaviour
     {
         // collect/remember all cutters
         cutters = FindCutters();
-        // create Quad game object called UpDownChecker
-        // UpDownChecker = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        // UpDownChecker.name = "UpDownChecker";
-        // make it a child of the player
-
-        // UpDownChecker.transform.parent = transform;
-        // UpDownChecker.transform.position = transform.position + new Vector3(0, 0, maxEdgeDistance/2);
-        // // make it scale same width with target
-        // UpDownChecker.transform.rotation = Quaternion.Euler(90, 0, 0);
-        // UpDownChecker.transform.localScale = new Vector3(maxEdgeDistance, maxEdgeDistance, 1);
-        
-        // disable mesh renderer
-        // UpDownChecker.GetComponent<MeshRenderer>().enabled = false;
-        // // disable collider
-        // UpDownChecker.GetComponent<Collider>().enabled = false;
-        // make collider trigger
-        // UpDownChecker.GetComponent<Collider>().isTrigger = true;
-        // print cutterLayer.value
-        // print cutters.Length;
-        // print((int)cutterLayer.value);
     }
-    // void Update()
-    // {
-    //     // make updownchecker face camera
-    //     // UpDownChecker.transform.LookAt(transform.position);
-    //     // lock x rotation of updownchecker
-    // }
 
     Cutter findBestCutter(){
         // create a list of cutters
@@ -83,9 +57,9 @@ public class Edgecut : MonoBehaviour
             transformedNormal,
             transformedStartingPoint
         );
-        if(transformedNormal.x<0 || transformedNormal.y<0){
-            cutterNRPlane = cutterNRPlane.flipped;
-        }
+        // if(transformedNormal.x<0 || transformedNormal.y<0){
+        //     cutterNRPlane = cutterNRPlane.flipped;
+        // }
 
     
         // check target is intersect with cutter
@@ -133,16 +107,16 @@ public class Edgecut : MonoBehaviour
         originalScale = 1;
         targetScale = new Vector3(1, 1, 1);
 
-        if(!cutter.isVertical){
-            ResizeTarget(slices[1].transform, hits[1], originalDistance, originalScale, targetScale); // right side
+        // if(!cutter.isVertical){
+        //     ResizeTarget(slices[1].transform, hits[1], originalDistance, originalScale, targetScale); // right side
+        // // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
+        //     ResizeTarget(slices[0].transform, hits[0], originalDistance, originalScale, targetScale); // left side
+        // }else{
+        // cutter.GetLeftRightCutter();
+        ResizeTarget(slices[1].transform, hits[1], originalDistance, originalScale, targetScale); // right side
         // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
-            ResizeTarget(slices[0].transform, hits[0], originalDistance, originalScale, targetScale); // left side
-        }else{
-             // cutter.GetLeftRightCutter();
-            ResizeTarget(slices[1].transform, hits[0], originalDistance, originalScale, targetScale); // right side
-            // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
-            ResizeTarget(slices[0].transform, hits[1], originalDistance, originalScale, targetScale); // left side
-        }
+        ResizeTarget(slices[0].transform, hits[0], originalDistance, originalScale, targetScale); // left side
+        // }
        
         // cutterN.transform.localScale -= new Vector3(0.1f, 0, 0);
     }
