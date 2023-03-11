@@ -123,7 +123,7 @@ public class Edgecut : MonoBehaviour
     }
 
     void RecenterMeshPivotPos(GameObject target){
-        // get the local and world shift value
+        // get the local(for vertice shift) and world(for overall shift with scale) shift value
         Vector3 worldBoundShift = target.GetComponent<Renderer>().bounds.center - target.transform.position;
         Vector3 boundCenter = target.GetComponent<Renderer>().localBounds.center;
 
