@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Day1/Achieved/Day1Coding.unity
     guid: 059fef572c625493980f6f415b26ea37
   - enabled: 1
+    path: Assets/Scenes/Day1/IntroLevelSandy.unity
+    guid: 441a3a77cc91740e396d1733937b0cca
+  - enabled: 1
     path: Assets/Scenes/Day1/Day1Level.unity
     guid: e6ab909ee1569460e87858e16eb38c11
   m_configObjects: {}
