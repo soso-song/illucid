@@ -1,3 +1,8 @@
+//
+// Created by Soso Song (@sososong) on 3/11/2023
+// Copyright (c) 2023 Zhifei(Soso) Song. All rights reserved.
+//
+
 using UnityEngine;
 
 public class Cutter : MonoBehaviour
@@ -28,7 +33,7 @@ public class Cutter : MonoBehaviour
     public LayerMask cutterLayer;
 
     Camera cam;
-    GameObject TargetPoint, LeftPoint, RightPoint;
+    public GameObject TargetPoint, LeftPoint, RightPoint;
     Mesh mesh;
     MeshCollider CutterCollider;
     // GameObject UpDownChecker;

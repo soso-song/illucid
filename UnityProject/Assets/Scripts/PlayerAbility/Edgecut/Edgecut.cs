@@ -1,3 +1,8 @@
+//
+// Created by Soso Song (@sososong) on 3/11/2023
+// Copyright (c) 2023 Zhifei(Soso) Song. All rights reserved.
+//
+
 using UnityEngine;
 using Assets.Scripts; // to access Slicer
 using System.Collections.Generic;
@@ -15,14 +20,17 @@ public class Edgecut : MonoBehaviour
     // public int cutterLayerInt;
     // public float maxEdgeDistance = 50f;
     float originalDistance;             // The original distance between the player playerCamera and the target
-    float originalScale;                // The original scale of the target objects prior to being resized
-    Vector3 targetScale;                // The scale we want our object to be set to each frame
-    
+    // float originalScale;                // The original scale of the target objects prior to being resized
+    // Vector3 targetScale;                // The scale we want our object to be set to each frame
+    public float offsetFactor = 2f;
     // public GameObject UpDownChecker;
     void Start()
     {
         // collect/remember all cutters
         cutters = FindCutters();
+        // get child object of cuurent object
+
+        originalDistance = Vector3.Distance(transform.position, transform.GetChild(0).position);
     }
 
     Cutter findBestCutter(){
@@ -103,9 +111,9 @@ public class Edgecut : MonoBehaviour
         // Vector3 nearEdgeDirection = cutterN.transform.Find("PivotR").gameObject.transform.position - cutterN.transform.Find("PivotL").gameObject.transform.position;
         // Vector3 farEdgeDirection = cutterF.transform.Find("PivotR").gameObject.transform.position - cutterF.transform.Find("PivotL").gameObject.transform.position;
         // cutterN.transform.localScale += new Vector3(0.1f, 0, 0);
-        originalDistance = 3; // holdDistance
-        originalScale = 1;
-        targetScale = new Vector3(1, 1, 1);
+        // originalDistance = 3; // holdDistance
+        // originalScale = 1;
+        
 
         // if(!cutter.isVertical){
         //     ResizeTarget(slices[1].transform, hits[1], originalDistance, originalScale, targetScale); // right side
@@ -113,17 +121,39 @@ public class Edgecut : MonoBehaviour
         //     ResizeTarget(slices[0].transform, hits[0], originalDistance, originalScale, targetScale); // left side
         // }else{
         // cutter.GetLeftRightCutter();
-        ResizeTarget(slices[1].transform, hits[1], originalDistance, originalScale, targetScale); // right side
-        // // cutterN.transform.localScale += new Vector3(0.2f, 0, 0);
-        ResizeTarget(slices[0].transform, hits[0], originalDistance, originalScale, targetScale); // left side
+        RepositionTarget(slices[0].transform, hits[0].point);
+        RepositionTarget(slices[1].transform, hits[1].point);
+        ResizeTarget(slices[1].transform); // right side
+        ResizeTarget(slices[0].transform); // left side
         // }
-       
+
         // cutterN.transform.localScale -= new Vector3(0.1f, 0, 0);
     }
 
-    float offsetFactor = 2f;
+    
 
-    public void ResizeTarget(Transform target, RaycastHit hit, float originalDistance, float originalScale, Vector3 targetScale){
+    Vector3 RepositionTarget(Transform target, Vector3 hitPoint) 
+    {
+        // Vector3 p = Vector3.zero;
+        // Vector3 d = transform.forward;
+        // // Calculate the projection of vector v onto direction vector d
+        // Vector3 v = hitPoint;
+        // float proj = Vector3.Dot(hitPoint, d) / Vector3.Dot(d, d);
+        // calculate real target position
+        Vector3 targetPos = Vector3.Project(hitPoint - transform.position, transform.forward);
+        // make it shorter by offsetFactor
+        // Vector3 toTarget = targetPoint - targetPos;
+        Vector3 shorter = transform.forward * offsetFactor;
+
+        target.position = transform.position + targetPos - shorter;
+        // target.position = hit.point - transform.forward * offsetFactor;
+
+        return target.position;
+        //return camera.transform.position + projection;
+    }
+
+    void ResizeTarget(Transform target){
+        Vector3 targetScale = new Vector3(1, 1, 1);
         // RaycastHit hit;
         // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         // RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity, cutterLayer);
@@ -132,7 +162,8 @@ public class Edgecut : MonoBehaviour
         // {
         // Set the new position of the target by getting the hit point and moving it back a bit
         // depending on the scale and offset factor
-        target.position = hit.point - transform.forward * offsetFactor * targetScale.x;
+
+        // target.position = hit.point - transform.forward * offsetFactor * targetScale.x;
 
         // Calculate the current distance between the camera and the target object
         float currentDistance = Vector3.Distance(transform.position, target.position);
@@ -144,7 +175,7 @@ public class Edgecut : MonoBehaviour
         targetScale.x = targetScale.y = targetScale.z = s;
 
         // Set the scale for the target objectm, multiplied by the original scale
-        target.localScale = targetScale * originalScale;
+        target.localScale = targetScale * 1; //originalScale;
         // }
         // if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, cutterWalls))
         // {
