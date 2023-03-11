@@ -21,7 +21,7 @@ public class LaserLevelT : MonoBehaviour
         
         if(Physics.Raycast(ray , out hit , 300))
         {
-            if (hit.collider.gameObject.name == "DeformTriggerBall")
+            if (hit.collider.gameObject.layer == 13)
             {
                 laser.material.color = Color.green;
                 isTriggered = true;

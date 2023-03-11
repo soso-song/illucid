@@ -9002,7 +9002,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &928064933
 Transform:
   m_ObjectHideFlags: 0
@@ -12793,6 +12793,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTriggered: 0
+  trigger: {fileID: 14112678}
 --- !u!120 &1332972873
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -14885,6 +14886,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTriggered: 0
+  trigger: {fileID: 14112678}
 --- !u!120 &1644342368
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -17004,10 +17006,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779507105cbc5454b8909f36b9eb70ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laser1: {fileID: 1644342366}
-  laser2: {fileID: 1969498658}
-  laser3: {fileID: 1973655914}
-  laser4: {fileID: 1332972871}
+  lasers:
+  - laser: {fileID: 1644342366}
+  - laser: {fileID: 1969498658}
+  - laser: {fileID: 1973655914}
+  - laser: {fileID: 1332972871}
 --- !u!65 &1929159100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17279,6 +17282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTriggered: 0
+  trigger: {fileID: 14112678}
 --- !u!120 &1969498660
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -17520,6 +17524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTriggered: 0
+  trigger: {fileID: 14112678}
 --- !u!120 &1973655916
 LineRenderer:
   m_ObjectHideFlags: 0

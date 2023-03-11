@@ -1,34 +1,47 @@
 // using System.Collections;
 // using System.Collections.Generic;
+using System;
 using UnityEngine;
+
+[Serializable]
+public class LaserRef {
+    public Transform laser;
+    private Laser laserScript;
+    public Laser LaserScript { get => laserScript; set => laserScript = value;}
+
+} 
 
 public class LaserDoor : MonoBehaviour
 {
     // public int trigLaserNum = 0;
-    public Transform laser1;
-    public Transform laser2;
-    public Transform laser3;
-    public Transform laser4;
-    private Laser laser1Script;
-    private Laser laser2Script;
-    private Laser laser3Script;
-    private Laser laser4Script;
+    public LaserRef[] lasers;
     private float startYpos;
     // Start is called before the first frame update
     void Start()
     {
-        // get the laser script from the object   
-        laser1Script = laser1.GetComponent<Laser>();
-        laser2Script = laser2.GetComponent<Laser>();
-        laser3Script = laser3.GetComponent<Laser>();
-        laser4Script = laser4.GetComponent<Laser>();
+        for (int i = 0; i < lasers.Length; i++) {
+            if (lasers[i].laser != null) {
+                // set the laser script from the object
+
+                lasers[i].LaserScript = lasers[i].laser.GetComponent<Laser>();
+            }
+        }
         startYpos = transform.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (laser1Script.isTriggered && laser2Script.isTriggered && laser3Script.isTriggered && laser4Script.isTriggered)
+        bool allLasersTriggered = true;
+        for (int i = 0; i < lasers.Length; i++) {
+            if (lasers[i].laser != null) {
+                if (!lasers[i].LaserScript.isTriggered) {
+                    allLasersTriggered = false;
+                    break;
+                }
+            }
+        }
+        if (allLasersTriggered)
         {
             transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 2, transform.position.z), 2 * Time.deltaTime);
         }else if (transform.position.y < startYpos)

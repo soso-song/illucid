@@ -4,6 +4,7 @@ public class Laser : MonoBehaviour
 {
     private LineRenderer laser;
     public bool isTriggered = false;
+    public GameObject trigger;
 
     private void Start()
     {
@@ -27,8 +28,8 @@ public class Laser : MonoBehaviour
             laser.SetPosition(2, hit.point);
             if(Physics.Raycast(ray2 , out hit2 , 300))
             {
-                // check if hit object has name "Ground"
-                if (hit2.collider.gameObject.name == "Ground")
+                // check if hit object trigger
+                if (hit2.collider.gameObject == trigger)
                 {
                     laser.material.color = Color.green;
                     isTriggered = true;
