@@ -93,7 +93,7 @@ public class IllusionManager : MonoBehaviour
                 }
                 if (target.gameObject.layer == LAYER_CUTABLE)
                 {   
-                    Edgecut.CutTarget(target); // enable this !
+                    Edgecut.CutTarget(target);
                 }
                 target = null;
             }

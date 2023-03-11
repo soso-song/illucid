@@ -64,17 +64,21 @@ public class PickupController : MonoBehaviour
         // targetRb.transform.LookAt(transform);
         
         // let x rotation be free
-        targetRb.transform.rotation = Quaternion.Euler(0, holdArea.rotation.eulerAngles.y, 0);
 
         if (target.gameObject.layer == 12 && target.transform.localScale.x > 1) // LAYER_CUTABLE
-        { // change the scale of the target
+        { // big cutable
             target.transform.localScale = Vector3.Lerp(
                 target.transform.localScale, 
                 new Vector3(transform.localScale.x - 1, transform.localScale.y - 1, transform.localScale.z - 1), 
                 3f * Vector3.Distance(target.transform.position, transform.position) * Time.deltaTime
             );
-        }else if(target.gameObject.layer == 12 && target.transform.localScale.x < 1){
+        }
+        else if(target.gameObject.layer == 12 && target.transform.localScale.x < 1)
+        { // small cutable
             target.transform.localScale = Vector3.one;
+        } else if (target.gameObject.layer == 13)
+        { // zoomable target
+            targetRb.transform.rotation = Quaternion.Euler(0, holdArea.rotation.eulerAngles.y, 0);
         }
     }
 

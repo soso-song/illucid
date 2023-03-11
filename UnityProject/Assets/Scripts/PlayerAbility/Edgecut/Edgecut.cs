@@ -22,7 +22,7 @@ public class Edgecut : MonoBehaviour
     float originalDistance;             // The original distance between the player playerCamera and the target
     // float originalScale;                // The original scale of the target objects prior to being resized
     // Vector3 targetScale;                // The scale we want our object to be set to each frame
-    public float offsetFactor = 2f;
+    public float slicePosOffsetPerc = 0.8f;
     // public GameObject UpDownChecker;
     void Start()
     {
@@ -90,48 +90,89 @@ public class Edgecut : MonoBehaviour
             return;
         }
 
-        Debug.Log("cut success");
-
         Destroy(target.gameObject);
-        // Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();
+
+        // disable the collison of slices to avoid collision with player
         slices[0].GetComponent<Rigidbody>().isKinematic = true;
         slices[1].GetComponent<Rigidbody>().isKinematic = true;
+        Destroy(slices[0].GetComponent<MeshCollider>());
+        Destroy(slices[1].GetComponent<MeshCollider>());
+        
+        // Add necessary components to slices
         slices[0].AddComponent<TargetController>();
         slices[1].AddComponent<TargetController>();
-        // make slices to cutable layer
-        slices[0].layer = 12;
-        slices[1].layer = 12;
+        slices[0].layer = 12;//cutable layer
+        slices[1].layer = 12;//cutable layer
 
-
+        // scale & position code
         RepositionTarget(slices[0].transform, hits[0].point);
         RepositionTarget(slices[1].transform, hits[1].point);
         
-        ResizeTarget(slices[1].transform); // right side
-        ResizeTarget(slices[0].transform); // left side
-        // reset the pivot of slices
-        // slices[0].GetComponent<Renderer>().ResetBounds();
-        // slices[1].GetComponent<Renderer>().ResetLocalBounds();
-        // Vector3 LPivotOff = slices[0].GetComponent<Renderer>().bounds.center;
-        
+        ResizeTarget(slices[0].transform);
+        ResizeTarget(slices[1].transform);
+
         RecenterMeshPivotPos(slices[0]);
         RecenterMeshPivotPos(slices[1]);
 
-        // slices[0].GetComponent<Outline>().OutlineWidth = 0f;
-        // slices[1].GetComponent<Outline>().OutlineWidth = 0f;
-        // print("LPivotOff: ==-=-=-");
-        // print("LPivotOff: " + LPivotOff);
-        // print("LPivotOffLocal: " + LPivotOffLocal);
-        // add targetController to slices
+        // its safe to add collider back (since object is far away from player)
+        slices[0].AddComponent<MeshCollider>().convex = true;
+        slices[1].AddComponent<MeshCollider>().convex = true;
+        // slices[0].AddComponent<MeshCollider>();
+        // slices[1].AddComponent<MeshCollider>();
 
+        // LSlice = slices[0];
+        // RSlice = slices[1];
     }
 
-    void RecenterMeshPivotPos(GameObject target){
+
+    GameObject LSlice;
+    GameObject RSlice;
+
+    public void EnableLastSlidesCollider(){
+        LSlice.AddComponent<MeshCollider>().convex = true;
+        RSlice.AddComponent<MeshCollider>().convex = true;
+    }
+
+    void RepositionTarget(Transform slice, Vector3 hitPoint) 
+    {
+        Vector3 targetPos = Vector3.Project(hitPoint - transform.position, transform.forward);
+        // make it shorter by offsetFactor
+        // Vector3 toTarget = targetPoint - targetPos;
+        // get distance from camera to hitPoint
+        float distance = Vector3.Distance(transform.position, hitPoint);
+        Vector3 shorter = transform.forward * distance * (1f - slicePosOffsetPerc);
+
+        slice.position = transform.position + targetPos - shorter;
+        // target.position = hit.point - transform.forward * offsetFactor;
+
+        // return target.position;
+        //return camera.transform.position + projection;
+    }
+
+    void ResizeTarget(Transform slice){
+        Vector3 targetScale = new Vector3(1, 1, 1);
+
+        float currentDistance = Vector3.Distance(transform.position, slice.position);
+
+        // Calculate the ratio between the current distance and the original distance
+        float s = currentDistance / originalDistance;
+
+        // Set the scale Vector3 variable to be the ratio of the distances
+        targetScale.x = targetScale.y = targetScale.z = s;
+
+        // Set the scale for the target objectm, multiplied by the original scale
+        slice.localScale = targetScale * 1; //originalScale;
+
+        // return s;
+    }
+
+    void RecenterMeshPivotPos(GameObject slice){
         // get the local(for vertice shift) and world(for overall shift with scale) shift value
-        Vector3 worldBoundShift = target.GetComponent<Renderer>().bounds.center - target.transform.position;
-        Vector3 boundCenter = target.GetComponent<Renderer>().localBounds.center;
+        Vector3 worldBoundShift = slice.GetComponent<Renderer>().bounds.center - slice.transform.position;
+        Vector3 boundCenter = slice.GetComponent<Renderer>().localBounds.center;
 
         // reposition the pivot
-        Mesh mesh = target.GetComponent<MeshFilter>().mesh;
+        Mesh mesh = slice.GetComponent<MeshFilter>().mesh;
         Vector3[] vertices = mesh.vertices;
         for (int i = 0; i < vertices.Length; i++)
             vertices[i] -= boundCenter;
@@ -141,45 +182,14 @@ public class Edgecut : MonoBehaviour
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         mesh.RecalculateTangents();
-        if(target.GetComponent<MeshCollider>() != null){
-            target.GetComponent<MeshCollider>().sharedMesh = null;
-            target.GetComponent<MeshCollider>().sharedMesh = mesh;
-        }
+        // if(target.GetComponent<MeshCollider>() != null){
+        //     target.GetComponent<MeshCollider>().sharedMesh = null;
+        //     target.GetComponent<MeshCollider>().sharedMesh = mesh;
+        // }
         // target.GetComponent<Renderer>().ResetLocalBounds();
 
         // reposition the object
-        target.transform.position += worldBoundShift;
-    }
-
-    Vector3 RepositionTarget(Transform target, Vector3 hitPoint) 
-    {
-        Vector3 targetPos = Vector3.Project(hitPoint - transform.position, transform.forward);
-        // make it shorter by offsetFactor
-        // Vector3 toTarget = targetPoint - targetPos;
-        Vector3 shorter = transform.forward * offsetFactor;
-
-        target.position = transform.position + targetPos - shorter;
-        // target.position = hit.point - transform.forward * offsetFactor;
-
-        return target.position;
-        //return camera.transform.position + projection;
-    }
-
-    float ResizeTarget(Transform target){
-        Vector3 targetScale = new Vector3(1, 1, 1);
-
-        float currentDistance = Vector3.Distance(transform.position, target.position);
-
-        // Calculate the ratio between the current distance and the original distance
-        float s = currentDistance / originalDistance;
-
-        // Set the scale Vector3 variable to be the ratio of the distances
-        targetScale.x = targetScale.y = targetScale.z = s;
-
-        // Set the scale for the target objectm, multiplied by the original scale
-        target.localScale = targetScale * 1; //originalScale;
-
-        return s;
+        slice.transform.position += worldBoundShift;
     }
 
     public Cutter[] FindCutters()
