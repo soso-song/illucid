@@ -115,6 +115,9 @@ public class Edgecut : MonoBehaviour
         
         RecenterMeshPivotPos(slices[0]);
         RecenterMeshPivotPos(slices[1]);
+
+        // slices[0].GetComponent<Outline>().OutlineWidth = 0f;
+        // slices[1].GetComponent<Outline>().OutlineWidth = 0f;
         // print("LPivotOff: ==-=-=-");
         // print("LPivotOff: " + LPivotOff);
         // print("LPivotOffLocal: " + LPivotOffLocal);

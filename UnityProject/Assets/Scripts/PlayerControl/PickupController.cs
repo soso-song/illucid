@@ -50,6 +50,7 @@ public class PickupController : MonoBehaviour
         }
     }
     public void MoveTarget(){
+        // float distance = Vector3.Distance(target.transform.position, holdArea.position);
         if(Vector3.Distance(target.transform.position, holdArea.position) > 0.01f){
             targetRb.AddForce(
                 (holdArea.position - target.transform.position) * 
@@ -64,6 +65,17 @@ public class PickupController : MonoBehaviour
         
         // let x rotation be free
         targetRb.transform.rotation = Quaternion.Euler(0, holdArea.rotation.eulerAngles.y, 0);
+
+        if (target.gameObject.layer == 12 && target.transform.localScale.x > 1) // LAYER_CUTABLE
+        { // change the scale of the target
+            target.transform.localScale = Vector3.Lerp(
+                target.transform.localScale, 
+                new Vector3(transform.localScale.x - 1, transform.localScale.y - 1, transform.localScale.z - 1), 
+                3f * Vector3.Distance(target.transform.position, transform.position) * Time.deltaTime
+            );
+        }else if(target.gameObject.layer == 12 && target.transform.localScale.x < 1){
+            target.transform.localScale = Vector3.one;
+        }
     }
 
     public void DropTarget(){
