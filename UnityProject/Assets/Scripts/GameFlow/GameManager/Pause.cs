@@ -30,6 +30,6 @@ public class Pause : MonoBehaviour
 
     public void Restart(){
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Day1Level");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
