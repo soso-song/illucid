@@ -92,6 +92,20 @@ public class Edgecut : MonoBehaviour
             return;
         }
 
+        // count the number of vertices of slices[0]
+        int verticesCountL = slices[0].GetComponent<MeshFilter>().mesh.vertexCount;
+        int verticesCountR = slices[1].GetComponent<MeshFilter>().mesh.vertexCount;
+
+        if (verticesCountL < 3 || verticesCountR < 3)
+        {
+            Debug.Log("verticesCountL:" + verticesCountL);
+            Debug.Log("verticesCountR:" + verticesCountR);
+            Debug.Log("error: verticesCountL < 3 || verticesCountR < 3");
+            Destroy(slices[0]);
+            Destroy(slices[1]);
+            return;
+        }
+
         Destroy(target.gameObject);
 
         // disable the collison of slices to avoid collision with player
