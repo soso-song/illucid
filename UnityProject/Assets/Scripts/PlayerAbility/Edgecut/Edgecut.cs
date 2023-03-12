@@ -15,6 +15,8 @@ public class Edgecut : MonoBehaviour
     // public Transform door;
     public Cutter[] cutters;
 
+    public bool debugMode = true;
+
     [Header("Parameters")]
     // public LayerMask cutterLayer;
     // public int cutterLayerInt;

@@ -13,7 +13,7 @@ public class Cutter : MonoBehaviour
     public float rightDistance;
     public bool isCutReady = false;
     public bool isIntersectObject = false;
-    public bool isUpDownIntersectObject = false;
+    public bool isIntersectionBetweenAB = false;
     public bool isLeftRightIntersectObject = false;
     // public bool isIntersectObjectStay = false;
     // public float slope = 0.5f;
@@ -25,7 +25,6 @@ public class Cutter : MonoBehaviour
     [Header("Parameters")]
     public Vector3 A;
     public Vector3 B;
-    public Vector3 C;
     public float LeftRightPointOffset = 0.2f;
     public float MinDiff = 5f;
     public float MaxDiff = 70f;
@@ -44,6 +43,8 @@ public class Cutter : MonoBehaviour
     // private Vector3 AB;
     GameObject pivot;
     GameObject IntersectPlane;
+    public Vector3 C;
+    Vector3 T;
 
     void Start()
     {
@@ -59,7 +60,9 @@ public class Cutter : MonoBehaviour
         C = cam.transform.position;
 
         // create the TargetPoint, LeftPoint and RightPoint
-        // check isUpDownIntersectObject, isCutReady
+        // check isIntersectionBetweenAB, isCutReady
+        
+        
         TargetPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         LeftPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         RightPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -86,10 +89,14 @@ public class Cutter : MonoBehaviour
         Destroy(IntersectPlane.GetComponent<MeshCollider>());
         IntersectPlane.AddComponent<BoxCollider>();
         IntersectPlane.GetComponent<BoxCollider>().isTrigger = true;
+        // rotate z axis of IntersectPlane to 90 degree
+        // IntersectPlane.transform.Rotate(0, 0, 45);
 
         IntersectPlane.transform.parent = pivot.transform;
         float height = Vector3.Distance(A, B);
-        pivot.transform.position = transform.position;
+        // get the middle point of A and B
+        // Vector3 middlePoint = (A + B) / 2;
+        pivot.transform.position = (A + B) / 2; //transform.position;
         IntersectPlane.transform.localPosition = new Vector3(-0.5f, 0, 0);
         IntersectPlane.transform.localScale = new Vector3(1, height, 0.01f); // 0.01 is the z scale for collider
         // attach the IntersectPlane script to the IntersectPlane
@@ -100,6 +107,15 @@ public class Cutter : MonoBehaviour
         
         // efficient storage
         // AB = B - A;
+
+        if (!edgecut.debugMode)
+        {
+            TargetPoint.GetComponent<MeshRenderer>().enabled = false;
+            LeftPoint.GetComponent<MeshRenderer>().enabled = false;
+            RightPoint.GetComponent<MeshRenderer>().enabled = false;
+            ATransform.GetComponent<MeshRenderer>().enabled = false;
+            BTransform.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     void Update()
@@ -107,8 +123,9 @@ public class Cutter : MonoBehaviour
         A = ATransform.position;
         B = BTransform.position;
         C = cam.transform.position;
+        T = TargetPoint.transform.position;
         // make distance = TargetPoint - cam
-        distance = Vector3.Distance(TargetPoint.transform.position, C);
+        distance = Vector3.Distance(T, C);
 
         // check left right intersection (supports rotation)
         UpdateCutterTriangleOnce();
@@ -117,7 +134,7 @@ public class Cutter : MonoBehaviour
         // update CutReady Point position (supports rotation)
         UpdateTargetPoint(); 
 
-        if(isLeftRightIntersectObject && isUpDownIntersectObject){
+        if(isLeftRightIntersectObject && isIntersectionBetweenAB){
             isIntersectObject = true;
         } else {
             isIntersectObject = false;
@@ -148,7 +165,7 @@ public class Cutter : MonoBehaviour
         TargetPoint.transform.LookAt(C, B-A); // A-B is up direction
 
         // check if the y position of TargetPoint is between A and B
-        isUpDownIntersectObject = IsIntersectionBetweenAB(intersection);
+        isIntersectionBetweenAB = IsIntersectionBetweenAB(intersection);
     }
 
     // Vector3 ClosestPointOnLine(Vector3 linePoint, Vector3 lineDirection, Vector3 point)
@@ -166,7 +183,7 @@ public class Cutter : MonoBehaviour
     //     return closestPoint;
     // }
 
-    void debugPlan(Vector3 planeNormal){
+    void debugPlane(Vector3 planeNormal){
         GameObject plane;
         if (transform.Find("Plane") == null)
         {
@@ -221,7 +238,7 @@ public class Cutter : MonoBehaviour
         // rotate the normal 
         // Vector3 n = cam.transform.rotation * (B-A).normalized;
         Vector3 n = cam.transform.rotation * (B-A).normalized;
-        // debugPlan(n);
+        // debugPlane(n);
         // print n
         // print(n);
         // draw debug that shows a plane with normal n
@@ -263,7 +280,10 @@ public class Cutter : MonoBehaviour
         float dotABAC = Vector3.Dot(AB, AC);
         float dotABBC = Vector3.Dot(AB, BC);
 
-        if (dotABAC >= 0f && dotABBC <= 0f)
+        Vector3 CT = T - C;
+        float dotCA = Vector3.Dot(CT.normalized, cam.transform.forward);
+        // print(dotCA);
+        if (dotABAC >= 0f && dotABBC <= 0f && dotCA > 0f)
         {
             // C is between A and B.
             return true;
@@ -277,15 +297,17 @@ public class Cutter : MonoBehaviour
 
     public RaycastHit[] CheckCutReady(){
         // get the distance between Camera and TargetPoint
-        midDistance = Vector3.Distance(C, TargetPoint.transform.position);
+        midDistance = Vector3.Distance(C, T);
         RaycastHit hitL, hitR;
         Physics.Raycast(C, LeftPoint.transform.position - C, out hitL, Mathf.Infinity, cutterLayer);
         Physics.Raycast(C, RightPoint.transform.position - C, out hitR, Mathf.Infinity, cutterLayer);
         leftDistance = Vector3.Distance(C, hitL.point);
         rightDistance = Vector3.Distance(C, hitR.point);
         // show the raycast
-        Debug.DrawRay(C, LeftPoint.transform.position - C, Color.red);
-        Debug.DrawRay(C, RightPoint.transform.position - C, Color.red);
+        if(edgecut.debugMode){
+            Debug.DrawRay(C, LeftPoint.transform.position - C, Color.red);
+            Debug.DrawRay(C, RightPoint.transform.position - C, Color.red);
+        }
 
         isCutReady = false;
 
