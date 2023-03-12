@@ -166,11 +166,62 @@ public class Cutter : MonoBehaviour
     //     return closestPoint;
     // }
 
+    void debugPlan(Vector3 planeNormal){
+        GameObject plane;
+        if (transform.Find("Plane") == null)
+        {
+            plane = new GameObject("Plane");
+            plane.transform.parent = transform;
+            plane.AddComponent<MeshFilter>();
+            plane.AddComponent<MeshRenderer>();
+        }
+        else
+        {
+            plane = transform.Find("Plane").gameObject;
+        }
+        
+        float planeSize = 30f;
+
+        // Add MeshFilter and MeshRenderer components
+        MeshFilter meshFilter = plane.GetComponent<MeshFilter>();
+        MeshRenderer meshRenderer = plane.GetComponent<MeshRenderer>();
+
+        // Create a new mesh
+        Mesh mesh = new Mesh();
+
+        // Calculate the plane vertices
+        Vector3  planeForward= planeNormal.normalized * planeSize;
+        Vector3 planeRight = Vector3.Cross(planeNormal, Vector3.forward).normalized * planeSize;
+        Vector3 planeUp = Vector3.Cross(planeNormal, planeRight).normalized * planeSize;
+        Vector3 planeCenter = Vector3.zero;
+
+        Vector3[] vertices = new Vector3[]
+        {
+            planeCenter + planeUp + planeRight,
+            planeCenter + planeUp - planeRight,
+            planeCenter - planeUp - planeRight,
+            planeCenter - planeUp + planeRight
+        };
+
+        // Set the mesh vertices and triangles
+        mesh.vertices = vertices;
+        mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+
+        // Assign the mesh to the mesh filter component
+        meshFilter.mesh = null;
+        meshFilter.mesh = mesh;
+        
+        plane.transform.position = C;
+        plane.transform.LookAt(transform.position, planeNormal);
+    }
+
     public Vector3 GetLinePlaneIntersection(Vector3 A, Vector3 B)
     {
         // Vector3 n = cam.transform.up;
         // rotate the normal 
+        // Vector3 n = cam.transform.rotation * (B-A).normalized;
         Vector3 n = cam.transform.rotation * (B-A).normalized;
+        // debugPlan(n);
         // print n
         // print(n);
         // draw debug that shows a plane with normal n
