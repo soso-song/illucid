@@ -1,5 +1,5 @@
-// using System.Collections;
-// using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetController : MonoBehaviour
@@ -23,6 +23,9 @@ public class TargetController : MonoBehaviour
     public float minObjFOV=-12;
     public float maxObjFOV=80;
 
+    [Header("EdgeCutParameters")]
+    
+    public bool isStatic = true;
     void Start()
     {
         // add script Outline to the object
@@ -30,6 +33,12 @@ public class TargetController : MonoBehaviour
         // disable the outline
         // outline.enabled = false;
         outline.OutlineWidth = 0;
+
+        // // check if the object has a mesh collider
+        // if (gameObject.GetComponent<MeshCollider>() == null)
+        // {
+        //     gameObject.AddComponent<MeshCollider>();
+        // }
     }
 
     public void IncrementDrop()
@@ -49,5 +58,31 @@ public class TargetController : MonoBehaviour
         //         outline.OutlineColor = Color.grey;
         //         break;
         // }
+    }
+
+    public IEnumerator WaitDrop(float seconds){
+        // wait one frame for start() to finish
+        gameObject.layer = 0; // unable to pickup
+        yield return null;
+        outline.OutlineColor = Color.yellow;
+        outline.OutlineWidth = 8;
+
+
+        // seconds latter, drop the object
+        yield return new WaitForSeconds(seconds);
+        GetComponent<Rigidbody>().isKinematic = false; // enable physics
+        GetComponent<Rigidbody>().useGravity = true;
+        outline.OutlineColor = Color.white;
+        outline.OutlineWidth = 0;
+        gameObject.layer = 12; // able to pickup
+    }
+
+    public IEnumerator EnableColliderAfterFrame(int frameCount = 1){
+        // weird bug, after change pos then resize then add collider, player will be pushed by big slides.
+        // so wait one frame to really make sure position changed before add collider
+        for (int i = 0; i < frameCount; i++)
+            yield return null;
+        // wait for frames
+        gameObject.AddComponent<MeshCollider>().convex = true;
     }
 }

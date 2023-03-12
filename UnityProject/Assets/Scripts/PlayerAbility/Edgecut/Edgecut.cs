@@ -108,17 +108,28 @@ public class Edgecut : MonoBehaviour
 
         Destroy(target.gameObject);
 
-        // disable the collison of slices to avoid collision with player
-        slices[0].GetComponent<Rigidbody>().isKinematic = true;
-        slices[1].GetComponent<Rigidbody>().isKinematic = true;
-        Destroy(slices[0].GetComponent<MeshCollider>());
-        Destroy(slices[1].GetComponent<MeshCollider>());
-        
         // Add necessary components to slices
-        slices[0].AddComponent<TargetController>();
-        slices[1].AddComponent<TargetController>();
         slices[0].layer = 12;//cutable layer
         slices[1].layer = 12;//cutable layer
+
+        TargetController targetControllerL = slices[0].AddComponent<TargetController>();
+        TargetController targetControllerR = slices[1].AddComponent<TargetController>();
+        slices[0].GetComponent<Rigidbody>().isKinematic = true;
+        slices[1].GetComponent<Rigidbody>().isKinematic = true;
+
+        if(target.GetComponent<TargetController>().isStatic){
+            targetControllerL.isStatic = true;
+            targetControllerR.isStatic = true;
+        }else{
+            StartCoroutine(targetControllerL.WaitDrop(1.5f));
+            StartCoroutine(targetControllerR.WaitDrop(1.5f));
+            targetControllerL.isStatic = false;
+            targetControllerR.isStatic = false;
+        }
+
+        // disable the collison of slices to avoid collision with player
+        Destroy(slices[0].GetComponent<MeshCollider>());
+        Destroy(slices[1].GetComponent<MeshCollider>());
 
         // scale & position code
         RepositionTarget(slices[0].transform, hits[0].point);
@@ -131,23 +142,25 @@ public class Edgecut : MonoBehaviour
         RecenterMeshPivotPos(slices[1]);
 
         // its safe to add collider back (since object is far away from player)
-        slices[0].AddComponent<MeshCollider>().convex = true;
-        slices[1].AddComponent<MeshCollider>().convex = true;
+
         // slices[0].AddComponent<MeshCollider>();
         // slices[1].AddComponent<MeshCollider>();
+
+        StartCoroutine(targetControllerL.EnableColliderAfterFrame(8));
+        StartCoroutine(targetControllerR.EnableColliderAfterFrame(8));
 
         // LSlice = slices[0];
         // RSlice = slices[1];
     }
 
 
-    GameObject LSlice;
-    GameObject RSlice;
+    // GameObject LSlice;
+    // GameObject RSlice;
 
-    public void EnableLastSlidesCollider(){
-        LSlice.AddComponent<MeshCollider>().convex = true;
-        RSlice.AddComponent<MeshCollider>().convex = true;
-    }
+    // public void EnableLastSlidesCollider(){
+    //     LSlice.AddComponent<MeshCollider>().convex = true;
+    //     RSlice.AddComponent<MeshCollider>().convex = true;
+    // }
 
     void RepositionTarget(Transform slice, Vector3 hitPoint) 
     {
