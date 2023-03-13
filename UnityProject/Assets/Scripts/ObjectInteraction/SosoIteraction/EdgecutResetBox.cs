@@ -13,31 +13,29 @@ public class EdgecutResetBox : MonoBehaviour
     // Start is called before the first frame update
     Edgecut edgecut;
 
+    public bool keepSlice = false;
+
     void Start()
     {
         edgecut = Camera.main.GetComponent<Edgecut>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == 12)
         {
-            // print("collider is colliding with MyOtherObject");
-            // print(other.gameObject.transform.parent);
-            // check if the gameobject has a parent
-            if (other.gameObject.transform.parent == null){
+            if (other.gameObject.transform.parent == null){ // not holding
                 // get the name of the object
-                if(other.gameObject.name.Contains("_")){
+                if(other.gameObject.name.Contains("_")){ // is slice
                     // get the name of the object which before the "_"
                     string name = other.gameObject.name.Split('_')[0];
-                    print("remove every " + name);
-                    RemoveObjectWithName(name);
+                    // deactive the object
+                    other.gameObject.SetActive(false);
+                    if(!keepSlice){
+                        print("remove every " + name);
+                        RemoveObjectWithName(name);
+                    }
+                    RecoverObjectWithName(name);
                 }
                 // check if the object name has "_" in it
 
@@ -57,8 +55,12 @@ public class EdgecutResetBox : MonoBehaviour
         }
         // get child with name "EdgecutBackupBucket"
         // GameObject EdgecutBackupBucket = GameObject.Find("EdgecutBackupBucket");
+    }
+
+    void RecoverObjectWithName(string name){
         Transform original = edgecut.CutableBackupBucket.transform.Find(name);
-        original.position = transform.position;
-        original.gameObject.SetActive(true);
+        GameObject dulplicate = Instantiate(original.gameObject);
+        dulplicate.transform.position = transform.position;
+        dulplicate.gameObject.SetActive(true);
     }
 }

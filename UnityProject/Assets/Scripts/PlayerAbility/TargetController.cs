@@ -28,11 +28,13 @@ public class TargetController : MonoBehaviour
     public bool isStatic = true;
     void Start()
     {
-        // add script Outline to the object
-        outline = gameObject.AddComponent<Outline>();
-        // disable the outline
-        // outline.enabled = false;
-        outline.OutlineWidth = 0;
+        // if the object dont have Outline script
+        if (gameObject.GetComponent<Outline>() == null)
+        {
+            outline = gameObject.AddComponent<Outline>();
+            outline.OutlineWidth = 0;
+        }
+        
 
         // // check if the object has a mesh collider
         // if (gameObject.GetComponent<MeshCollider>() == null)
