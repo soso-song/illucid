@@ -93,9 +93,7 @@ public class TargetController : MonoBehaviour
         Vector3 startScale = transform.localScale;
 
         while (time < duration) {
-            float t = time / duration;
-            Vector3 newScale = Vector3.Lerp(startScale, Vector3.zero, t);
-            transform.localScale = newScale;
+            transform.localScale = Vector3.Lerp(startScale, Vector3.zero, time / duration);
             time += Time.deltaTime;
             yield return null;
         }
