@@ -4041,6 +4041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pause: {fileID: 617414517}
+  illusionManager: {fileID: 963194229}
 --- !u!114 &316156250
 MonoBehaviour:
   m_ObjectHideFlags: 0

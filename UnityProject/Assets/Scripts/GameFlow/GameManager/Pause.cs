@@ -20,7 +20,8 @@ public class Pause : MonoBehaviour
             Time.timeScale = 0f;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            illusionManager.enabled = false;
+            if (illusionManager != null)
+                illusionManager.enabled = false;
         }
     }
     
@@ -29,7 +30,8 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        illusionManager.enabled = true;
+        if (illusionManager != null)
+            illusionManager.enabled = true;
     }
 
     public void Restart(){

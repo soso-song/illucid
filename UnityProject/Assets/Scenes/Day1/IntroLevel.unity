@@ -9128,6 +9128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pause: {fileID: 620225342}
+  illusionManager: {fileID: 963194229}
 --- !u!1 &1786904408 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6175747962855977565, guid: 22ebc1406a2064a68b72a84fd4b22009, type: 3}
