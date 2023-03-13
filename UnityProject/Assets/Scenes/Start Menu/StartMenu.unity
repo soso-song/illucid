@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &28555992
 RectTransform:
   m_ObjectHideFlags: 0
@@ -907,7 +907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &481044320
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1389,11 +1389,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7627303499211903800, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627303499868467460, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627303500297621150, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_Pivot.x
@@ -2505,11 +2505,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7627303499211903800, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627303499868467460, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627303500297621150, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_Pivot.x
@@ -2934,11 +2934,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7627303499211903800, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627303499868467460, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627303500297621150, guid: 80bd748872ecd4223ac010c363aacf38, type: 3}
       propertyPath: m_Pivot.x
