@@ -42,7 +42,7 @@ public class GameFlowControl : MonoBehaviour
         }
         Animator anim = mask.GetComponent<Animator>();
         anim.Play(clip);
-        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length+0.5f);
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
     }
 
     public void LoadLevel()
@@ -58,7 +58,7 @@ public class GameFlowControl : MonoBehaviour
         {
             timeElapsed += Time.deltaTime;
             // if no animation is playing, load next scene
-            if (timeElapsed > 1.5f){
+            if (timeElapsed > 0.5f){
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
