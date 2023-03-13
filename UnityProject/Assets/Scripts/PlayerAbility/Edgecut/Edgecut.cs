@@ -25,6 +25,8 @@ public class Edgecut : MonoBehaviour
     // float originalScale;                // The original scale of the target objects prior to being resized
     // Vector3 targetScale;                // The scale we want our object to be set to each frame
     public float slicePosOffsetPerc = 0.8f;
+
+    public Transform slicesBucket;
     // public GameObject UpDownChecker;
     void Start()
     {
@@ -111,6 +113,9 @@ public class Edgecut : MonoBehaviour
         // Add necessary components to slices
         slices[0].layer = 12;//cutable layer
         slices[1].layer = 12;//cutable layer
+        // set the parent of slices
+        slices[0].transform.parent = slicesBucket;
+        slices[1].transform.parent = slicesBucket;
 
         TargetController targetControllerL = slices[0].AddComponent<TargetController>();
         TargetController targetControllerR = slices[1].AddComponent<TargetController>();
