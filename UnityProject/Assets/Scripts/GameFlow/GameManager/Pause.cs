@@ -7,6 +7,8 @@ public class Pause : MonoBehaviour
 {   
     [SerializeField] GameObject pause;
     // Start is called before the first frame update
+    // script to disbale
+    public IllusionManager illusionManager;
 
     void Start(){
         pause.SetActive(false);
@@ -18,6 +20,7 @@ public class Pause : MonoBehaviour
             Time.timeScale = 0f;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            illusionManager.enabled = false;
         }
     }
     
@@ -26,6 +29,7 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        illusionManager.enabled = true;
     }
 
     public void Restart(){
