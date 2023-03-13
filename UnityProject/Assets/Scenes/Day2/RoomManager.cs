@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
+    public GameFlowControl gameFlowControl;
     public GameObject GroupA;
     public GoalTrigger GoalATrigger;
     public GoalTrigger GoalBTrigger;
@@ -22,7 +23,7 @@ public class RoomManager : MonoBehaviour
     public PostProcessVolume postProcessingVolume;
 
     public void Changelevel(){
-
+        gameFlowControl.LoadLevel();
     }
 
     public void UseKey(GameObject sliceL, GameObject sliceR){
