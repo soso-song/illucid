@@ -1,15 +1,21 @@
+//
+// Created by Soso Song (@sososong) on 3/11/2023
+// Copyright (c) 2023 Zhifei(Soso) Song. All rights reserved.
+//
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EdgecutResetBox : MonoBehaviour
 {
-    public Transform SlicesBucket;
-    
+    public float destroyDuration = 3f;
     // Start is called before the first frame update
+    Edgecut edgecut;
+
     void Start()
     {
-        
+        edgecut = Camera.main.GetComponent<Edgecut>();
     }
 
     // Update is called once per frame
@@ -30,7 +36,8 @@ public class EdgecutResetBox : MonoBehaviour
                 if(other.gameObject.name.Contains("_")){
                     // get the name of the object which before the "_"
                     string name = other.gameObject.name.Split('_')[0];
-                    print(name);
+                    print("remove every " + name);
+                    RemoveObjectWithName(name);
                 }
                 // check if the object name has "_" in it
 
@@ -41,16 +48,17 @@ public class EdgecutResetBox : MonoBehaviour
     }
 
     void RemoveObjectWithName(string name){
-        foreach (GameObject obj in SlicesBucket.FindObjectsOfType<GameObject>()) {
-            if (obj.name.Contains(name)) {
-                Destroy(obj);
+        GameObject[] slices = GameObject.FindGameObjectsWithTag("Slice");
+        foreach (GameObject slice in slices) {
+            if (slice.name.Contains(name+"_")) {
+                // destroy the object during time
+                StartCoroutine(slice.GetComponent<TargetController>().ScaleDestroyOverTime(destroyDuration));
             }
         }
-        // find the object with the name
-        // get the object
-        // loop through the object
-        // check if the object has a parent
-
-        // destroy the object
+        // get child with name "EdgecutBackupBucket"
+        // GameObject EdgecutBackupBucket = GameObject.Find("EdgecutBackupBucket");
+        Transform original = edgecut.CutableBackupBucket.transform.Find(name);
+        original.position = transform.position;
+        original.gameObject.SetActive(true);
     }
 }

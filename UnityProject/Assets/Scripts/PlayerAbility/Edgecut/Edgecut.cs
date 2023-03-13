@@ -26,7 +26,7 @@ public class Edgecut : MonoBehaviour
     // Vector3 targetScale;                // The scale we want our object to be set to each frame
     public float slicePosOffsetPerc = 0.8f;
 
-    public Transform slicesBucket;
+    public GameObject CutableBackupBucket; // EdgebutResetBox depends on this
     // public GameObject UpDownChecker;
     void Start()
     {
@@ -35,6 +35,10 @@ public class Edgecut : MonoBehaviour
         // get child object of cuurent object
 
         originalDistance = Vector3.Distance(transform.position, transform.GetChild(0).position);
+    
+        CutableBackupBucket = new GameObject("CutableBackupBucket");
+        // back up all cutable objects
+        // BackupCutable();
     }
 
     Cutter findBestCutter(){
@@ -108,14 +112,22 @@ public class Edgecut : MonoBehaviour
             return;
         }
 
-        Destroy(target.gameObject);
+        if(target.tag == "Slice"){ // remove if its a slice
+            Destroy(target.gameObject);
+        }else{ // back up if its a original cutable
+            target.parent = CutableBackupBucket.transform;
+            target.gameObject.SetActive(false);
+        }
 
         // Add necessary components to slices
         slices[0].layer = 12;//cutable layer
         slices[1].layer = 12;//cutable layer
         // set the parent of slices
-        slices[0].transform.parent = slicesBucket;
-        slices[1].transform.parent = slicesBucket;
+        // slices[0].transform.parent = slicesBucket;
+        // slices[1].transform.parent = slicesBucket;
+        // add tag to slices
+        slices[0].tag = "Slice";
+        slices[1].tag = "Slice";
 
         TargetController targetControllerL = slices[0].AddComponent<TargetController>();
         TargetController targetControllerR = slices[1].AddComponent<TargetController>();
@@ -240,6 +252,24 @@ public class Edgecut : MonoBehaviour
         }
         return goList.ToArray();
     }
+
+    // public void BackupCutable()
+    // {
+    //     // create a new gameobject to hold all cutable objects
+    //     GameObject cutableBucket = new GameObject("CutableBucket");
+    //     GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+    //     foreach (GameObject obj in allObjects) {
+    //         if (obj.layer == 12 && obj.transform.parent != cutableBucket) {
+    //             // Debug.Log(obj.name);
+    //             // copy the object and add it to the cutableBucket
+    //             GameObject newObj = Instantiate(obj);
+    //             Destroy(newObj.GetComponent<Outline>());
+    //             newObj.transform.parent = cutableBucket.transform;
+    //             // disable the new object
+    //             newObj.SetActive(false);
+    //         }
+    //     }
+    // }
 
     // IEnumerator PauseOneFrame()
     // {

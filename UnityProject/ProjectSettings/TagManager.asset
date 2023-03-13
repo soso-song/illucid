@@ -7,6 +7,7 @@ TagManager:
   - HoldArea
   - CornSeed
   - Popcorn
+  - Slice
   layers:
   - Default
   - TransparentFX

@@ -85,4 +85,18 @@ public class TargetController : MonoBehaviour
         // wait for frames
         gameObject.AddComponent<MeshCollider>().convex = true;
     }
+
+    public IEnumerator ScaleDestroyOverTime(float duration){
+        float time = 0.0f;
+        Vector3 startScale = transform.localScale;
+
+        while (time < duration) {
+            float t = time / duration;
+            Vector3 newScale = Vector3.Lerp(startScale, Vector3.zero, t);
+            transform.localScale = newScale;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        Destroy(gameObject);
+    }
 }
