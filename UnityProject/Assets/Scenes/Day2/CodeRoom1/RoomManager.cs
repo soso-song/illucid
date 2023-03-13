@@ -3,11 +3,12 @@
 // Copyright (c) 2023 Zhifei(Soso) Song. All rights reserved.
 //
 
+using UnityEngine.Rendering.PostProcessing;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class L2Room1Manager : MonoBehaviour
+public class RoomManager : MonoBehaviour
 {
     public GameObject GroupA;
     public GoalTrigger GoalATrigger;
@@ -17,6 +18,43 @@ public class L2Room1Manager : MonoBehaviour
     public float duration = 2.0f;
 
     public float lengthPasswallY = 9f;
+
+    public PostProcessVolume postProcessingVolume;
+
+    public void Changelevel(){
+
+    }
+
+    public void UseKey(GameObject sliceL, GameObject sliceR){
+        // unpickable
+        sliceL.layer = 0;
+        sliceR.layer = 0;
+        // set to kinematic
+        sliceL.GetComponent<Rigidbody>().isKinematic = false;
+        sliceR.GetComponent<Rigidbody>().isKinematic = false;
+        // add force to the slices
+        Vector3 forceDir = Camera.main.transform.right;
+        sliceL.GetComponent<Rigidbody>().AddForce(forceDir * 60f);
+        sliceR.GetComponent<Rigidbody>().AddForce(forceDir * -60f);
+        Bloom bloom;
+        if (postProcessingVolume.profile.TryGetSettings(out bloom))
+        {
+            // Debug.Log("Bloom intensity: " + bloom.intensity.value);
+            StartCoroutine(setBloomIntensityAndThreshold(bloom, 3f, 40f, 0f));
+        }
+    }
+    public IEnumerator setBloomIntensityAndThreshold(Bloom bloom, float duration, float bloomValue, float thresholdValue){
+        float elapsed = 0.0f;
+        float startBloomValue = bloom.intensity.value;
+        float startThresholdValue = bloom.threshold.value;
+        while (elapsed < duration) {
+            bloom.intensity.value = Mathf.Lerp(startBloomValue, bloomValue, elapsed / duration);
+            bloom.threshold.value = Mathf.Lerp(startThresholdValue, thresholdValue, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        Changelevel();
+    }
 
     public bool CheckPassCond(){
         if( GoalATrigger.triggered == true && GoalBTrigger.triggered == true){

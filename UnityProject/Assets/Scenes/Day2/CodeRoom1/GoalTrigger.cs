@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class GoalTrigger : MonoBehaviour
 {
-    public L2Room1Manager room;
+    public RoomManager room;
     public bool wantSlice = false;
     public bool triggered = false;
     // Start is called before the first frame update
@@ -17,6 +17,7 @@ public class GoalTrigger : MonoBehaviour
     Color ColorB;
 
     public Transform triggerObj;
+
 
 
     void Start()
@@ -62,5 +63,6 @@ public class GoalTrigger : MonoBehaviour
         transform.parent.GetComponent<Renderer>().material.color = Color.white;
         triggered = false;
     }
+
 
 }

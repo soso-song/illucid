@@ -26,8 +26,12 @@ public class Edgecut : MonoBehaviour
     // Vector3 targetScale;                // The scale we want our object to be set to each frame
     public float slicePosOffsetPerc = 0.8f;
 
-    public GameObject CutableBackupBucket; // EdgebutResetBox depends on this
     // public GameObject UpDownChecker;
+    // check level
+    public RoomManager room = null;
+
+    [Header("Runtime Parameters")]
+    public GameObject CutableBackupBucket; // EdgebutResetBox depends on this
     void Start()
     {
         // collect/remember all cutters
@@ -168,6 +172,16 @@ public class Edgecut : MonoBehaviour
 
         // LSlice = slices[0];
         // RSlice = slices[1];
+
+        if(target.tag == "CutableKey"){ // key
+            if(room != null){
+                Destroy(target.gameObject);
+                //not pickable
+                room.UseKey(slices[0], slices[1]);
+            } else {
+                Debug.Log("error: room is null");
+            }
+        }
     }
 
 
