@@ -13,19 +13,19 @@ public class PlayerCharacterController : MonoBehaviour
     public float GravityDownForce = 20f;
     public LayerMask GroundCheckLayers = -1;
     public float GroundCheckDistance = 0.05f;
-    public float MaxSpeedOnGround = 10f;
+    public float MaxSpeedOnGround = 6f;
     public float MovementSharpnessOnGround = 15;
     public float MaxSpeedCrouchedRatio = 0.5f;
-    public float MaxSpeedInAir = 10f;
+    public float MaxSpeedInAir = 4f;
     public float AccelerationSpeedInAir = 25f;
     public float SprintSpeedModifier = 2f;
     public float KillHeight = -50f;
-    public float RotationSpeed = 200f;
+    public float RotationSpeed = 400f;
     public float AimingRotationMultiplier = 0.4f;
     public float JumpForce = 9f;
     public float CameraHeightRatio = 0.9f;
     public float CapsuleHeightStanding = 1.8f;
-    public float CapsuleHeightCrouching = 5.9f;
+    public float CapsuleHeightCrouching = 2.9f;
     public float CrouchingSharpness = 10f;
     public float FootstepSfxFrequency = 1f;
     public float FootstepSfxFrequencyWhileSprinting = 1f;
@@ -151,18 +151,19 @@ public class PlayerCharacterController : MonoBehaviour
     }
     void HandleCharacterMovement()
     {
+        float _rotationSpeed = RotationSpeed * StateControl.MouseSensitivity + 30;
         // horizontal character rotation
         {
             // rotate the transform with the input speed around its local Y axis
             transform.Rotate(
-                new Vector3(0f, (m_InputHandler.GetLookInputsHorizontal() * RotationSpeed * RotationMultiplier),
+                new Vector3(0f, (m_InputHandler.GetLookInputsHorizontal() * _rotationSpeed * RotationMultiplier),
                     0f), Space.Self);
         }
 
         // vertical camera rotation
         {
             // add vertical inputs to the camera's vertical angle
-            m_CameraVerticalAngle += m_InputHandler.GetLookInputsVertical() * RotationSpeed * RotationMultiplier;
+            m_CameraVerticalAngle += m_InputHandler.GetLookInputsVertical() * _rotationSpeed * RotationMultiplier;
 
             // limit the camera's vertical angle to min/max
             m_CameraVerticalAngle = Mathf.Clamp(m_CameraVerticalAngle, -89f, 89f);

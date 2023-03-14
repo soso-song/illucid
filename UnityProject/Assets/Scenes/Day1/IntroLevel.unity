@@ -1938,22 +1938,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e5b2e47274071340b5c25bac9888e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCameras:
-  - {fileID: 963194227}
-  - {fileID: 0}
+  PlayerCameras: []
   GravityDownForce: 20
   GroundCheckLayers:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 4294967295
   GroundCheckDistance: 0.05
-  MaxSpeedOnGround: 10
+  MaxSpeedOnGround: 6
   MovementSharpnessOnGround: 15
   MaxSpeedCrouchedRatio: 0.5
-  MaxSpeedInAir: 10
+  MaxSpeedInAir: 4
   AccelerationSpeedInAir: 25
   SprintSpeedModifier: 2
   KillHeight: -50
-  RotationSpeed: 200
+  RotationSpeed: 400
   AimingRotationMultiplier: 0.4
   JumpForce: 9
   CameraHeightRatio: 0.9
