@@ -1,5 +1,10 @@
-// using System.Collections;
-// using System.Collections.Generic;
+//
+// Created by Soso Song (@sososong) on 3/11/2023
+// Copyright (c) 2023 Zhifei(Soso) Song. All rights reserved.
+//
+
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PickupController : MonoBehaviour
@@ -69,7 +74,7 @@ public class PickupController : MonoBehaviour
         { // big cutable
             target.transform.localScale = Vector3.Lerp(
                 target.transform.localScale, 
-                new Vector3(transform.localScale.x - 1, transform.localScale.y - 1, transform.localScale.z - 1), 
+                new Vector3(1, 1, 1), 
                 3f * Vector3.Distance(target.transform.position, transform.position) * Time.deltaTime
             );
         }
@@ -97,4 +102,5 @@ public class PickupController : MonoBehaviour
         targetRb = null;
         target = null;
     }
+
 }
