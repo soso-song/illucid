@@ -5328,6 +5328,7 @@ MonoBehaviour:
   cutters: []
   debugMode: 1
   slicePosOffsetPerc: 0.8
+  staticObjectWaitTime: 1
   room: {fileID: 1768128604}
   CutableBackupBucket: {fileID: 0}
 --- !u!114 &963194233
@@ -7227,7 +7228,7 @@ LightingSettings:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   serializedVersion: 4
-  m_GIWorkflowMode: 1
+  m_GIWorkflowMode: 0
   m_EnableBakedLightmaps: 1
   m_EnableRealtimeLightmaps: 0
   m_RealtimeEnvironmentLighting: 1

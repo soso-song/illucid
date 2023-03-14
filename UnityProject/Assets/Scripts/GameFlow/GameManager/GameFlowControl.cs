@@ -33,6 +33,10 @@ public class GameFlowControl : MonoBehaviour
             }
         }
         StartCoroutine(playBlinkAnimation("OpenEyeAnim"));
+        if (SceneManager.GetActiveScene().buildIndex == 0){
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     IEnumerator playBlinkAnimation(string clip)
