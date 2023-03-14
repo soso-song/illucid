@@ -22,6 +22,11 @@ public class RoomManager : MonoBehaviour
 
     public PostProcessVolume postProcessingVolume;
 
+    void Start()
+    {
+        gameFlowControl = GetComponent<GameFlowControl>();
+    }
+
     public void Changelevel(){
         gameFlowControl.LoadLevel();
     }
