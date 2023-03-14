@@ -3128,7 +3128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e5b2e47274071340b5c25bac9888e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCameras: []
+  PlayerCameras:
+  - {fileID: 963194227}
   GravityDownForce: 20
   GroundCheckLayers:
     serializedVersion: 2
