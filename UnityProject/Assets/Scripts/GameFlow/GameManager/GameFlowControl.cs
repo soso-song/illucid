@@ -59,7 +59,13 @@ public class GameFlowControl : MonoBehaviour
             timeElapsed += Time.deltaTime;
             // if no animation is playing, load next scene
             if (timeElapsed > 1f){
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                // if has next scene, load next scene
+                // else, load first scene
+                if (SceneManager.GetActiveScene().buildIndex + 1 < SceneManager.sceneCountInBuildSettings){
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                } else{
+                    SceneManager.LoadScene(0);
+                }
             }
         }
     }
