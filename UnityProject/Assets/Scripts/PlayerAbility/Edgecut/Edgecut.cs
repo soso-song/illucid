@@ -26,6 +26,8 @@ public class Edgecut : MonoBehaviour
     // Vector3 targetScale;                // The scale we want our object to be set to each frame
     public float slicePosOffsetPerc = 0.8f;
 
+    public float staticObjectWaitTime = 1f;
+
     // public GameObject UpDownChecker;
     // check level
     public RoomManager room = null;
@@ -144,8 +146,8 @@ public class Edgecut : MonoBehaviour
             targetControllerL.isStatic = true;
             targetControllerR.isStatic = true;
         }else{
-            StartCoroutine(targetControllerL.WaitDrop(1.5f));
-            StartCoroutine(targetControllerR.WaitDrop(1.5f));
+            StartCoroutine(targetControllerL.WaitDrop(staticObjectWaitTime));
+            StartCoroutine(targetControllerR.WaitDrop(staticObjectWaitTime));
             targetControllerL.isStatic = false;
             targetControllerR.isStatic = false;
         }
