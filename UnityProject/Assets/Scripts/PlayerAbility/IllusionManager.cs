@@ -106,6 +106,7 @@ public class IllusionManager : MonoBehaviour
             outline.OutlineWidth = 0;
         }
         RaycastHit hit;
+        outline = null;
         if (target == null)
         {
             // send raycast on two layers
