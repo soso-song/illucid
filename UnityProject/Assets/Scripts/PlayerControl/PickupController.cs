@@ -53,6 +53,10 @@ public class PickupController : MonoBehaviour
 
             targetRb.transform.SetParent(holdArea);
         }
+        if (target.gameObject.layer == 12 && target.transform.localScale.x > 1) // LAYER_CUTABLE
+        { // big cutable
+            StartCoroutine(ScaleBackOverTime(target.transform, 0.1f));
+        }
     }
     public void MoveTarget(){
         // float distance = Vector3.Distance(target.transform.position, holdArea.position);
@@ -70,18 +74,7 @@ public class PickupController : MonoBehaviour
         
         // let x rotation be free
 
-        if (target.gameObject.layer == 12 && target.transform.localScale.x > 1) // LAYER_CUTABLE
-        { // big cutable
-            target.transform.localScale = Vector3.Lerp(
-                target.transform.localScale, 
-                new Vector3(1, 1, 1), 
-                3f * Vector3.Distance(target.transform.position, transform.position) * Time.deltaTime
-            );
-        }
-        else if(target.gameObject.layer == 12 && target.transform.localScale.x < 1)
-        { // small cutable
-            target.transform.localScale = Vector3.one;
-        } else if (target.gameObject.layer == 13)
+        if (target.gameObject.layer == 13)
         { // zoomable target
             targetRb.transform.rotation = Quaternion.Euler(0, holdArea.rotation.eulerAngles.y, 0);
         }
@@ -103,4 +96,14 @@ public class PickupController : MonoBehaviour
         target = null;
     }
 
+    public IEnumerator ScaleBackOverTime(Transform target, float duration){
+        float time = 0.0f;
+        print("scale back x1");
+        Vector3 startScale = target.localScale;
+        while (time < duration) {
+            target.localScale = Vector3.Lerp(startScale, Vector3.one, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+    }
 }
