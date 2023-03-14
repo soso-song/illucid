@@ -108,9 +108,11 @@ public class Edgecut : MonoBehaviour
 
         if (verticesCountL < 3 || verticesCountR < 3)
         {
-            Debug.Log("verticesCountL:" + verticesCountL);
-            Debug.Log("verticesCountR:" + verticesCountR);
-            Debug.Log("error: verticesCountL < 3 || verticesCountR < 3");
+            Debug.Log(
+                "error: verticesCountL < 3 || verticesCountR < 3" + 
+                " verticesCountL:" + verticesCountL + 
+                " verticesCountR:" + verticesCountR
+            );
             Destroy(slices[0]);
             Destroy(slices[1]);
             return;
