@@ -15,6 +15,8 @@ public class GameFlowControl : MonoBehaviour
     public GameObject maskPerfab;
     public string curRoom = "room 0";
 
+    int nextLevel = 0;
+
     void Start()
     {
         // Debug.Log("Game Time: "+Time.time + ", Level: "+SceneManager.GetActiveScene().buildIndex + ", Level Start");
@@ -37,6 +39,10 @@ public class GameFlowControl : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
+        nextLevel = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextLevel >= SceneManager.sceneCountInBuildSettings){
+            nextLevel = 0;
+        }
     }
 
     IEnumerator playBlinkAnimation(string clip)
@@ -56,6 +62,16 @@ public class GameFlowControl : MonoBehaviour
         isloading = true;
     }
 
+    public void _loadLevel(int level)
+    {
+        if (level < SceneManager.sceneCountInBuildSettings){
+            nextLevel = level;
+        }else{
+            nextLevel = 0;
+        }
+        LoadLevel();
+    }
+
     void Update()
     {
         if (isloading)
@@ -65,11 +81,7 @@ public class GameFlowControl : MonoBehaviour
             if (timeElapsed > 1f){
                 // if has next scene, load next scene
                 // else, load first scene
-                if (SceneManager.GetActiveScene().buildIndex + 1 < SceneManager.sceneCountInBuildSettings){
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                } else{
-                    SceneManager.LoadScene(0);
-                }
+                SceneManager.LoadScene(nextLevel);
             }
         }
     }
