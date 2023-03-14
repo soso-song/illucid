@@ -26,12 +26,14 @@ public class ExitPlatform : MonoBehaviour
         // if player is entering the platform
         if(other.gameObject.name == "Player"){
             Key.layer = 12;
+            // let partical child of the Key enable
+            Key.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
-    void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.name == "Player"){
-            Key.layer = 0;
-        }
-    }
+    // void OnTriggerExit(Collider other)
+    // {
+    //     if(other.gameObject.name == "Player"){
+    //         Key.layer = 0;
+    //     }
+    // }
 }
