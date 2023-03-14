@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Start Menu/StartMenu.unity
     guid: 83fb4267907fb4d69a599d705f709c24
   - enabled: 1
+    path: Assets/Scenes/IntroLevel.unity
+    guid: 15821aec273fb4215b71b33b688c97b7
+  - enabled: 1
     path: Assets/Scenes/Day1/Achieved/Day1Coding.unity
     guid: 059fef572c625493980f6f415b26ea37
-  - enabled: 1
-    path: Assets/Scenes/Day1/IntroLevel.unity
-    guid: 441a3a77cc91740e396d1733937b0cca
   - enabled: 1
     path: Assets/Scenes/Day1/Day1Level.unity
     guid: e6ab909ee1569460e87858e16eb38c11
