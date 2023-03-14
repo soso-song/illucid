@@ -56,6 +56,8 @@ public class PickupController : MonoBehaviour
         if (target.gameObject.layer == 12 && target.transform.localScale.x > 1) // LAYER_CUTABLE
         { // big cutable
             StartCoroutine(ScaleBackOverTime(target.transform, 0.1f));
+        } else if (target.gameObject.layer == 12 && target.transform.localScale.x < 1) {
+            target.transform.localScale = new Vector3(1, 1, 1);
         }
     }
     public void MoveTarget(){
@@ -98,7 +100,7 @@ public class PickupController : MonoBehaviour
 
     public IEnumerator ScaleBackOverTime(Transform target, float duration){
         float time = 0.0f;
-        print("scale back x1");
+        // print("scale back x1");
         Vector3 startScale = target.localScale;
         while (time < duration) {
             target.localScale = Vector3.Lerp(startScale, Vector3.one, time / duration);
