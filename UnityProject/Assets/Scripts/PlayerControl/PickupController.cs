@@ -76,7 +76,7 @@ public class PickupController : MonoBehaviour
         
         // let x rotation be free
 
-        if (target.gameObject.layer == 13)
+        if (target.GetComponent<TargetController>().lockRotate)// (target.gameObject.layer == 13)
         { // zoomable target
             targetRb.transform.rotation = Quaternion.Euler(0, holdArea.rotation.eulerAngles.y, 0);
         }

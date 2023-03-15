@@ -9,9 +9,11 @@ using UnityEngine;
 
 public class TargetController : MonoBehaviour
 {
+    [Header("PickupParameters")]
     private Outline outline;
     public int pickTime = 0;
     public int maxPickTime = 3;
+    public bool lockRotate = false;
 
     [Header("SuperviewParameters")]
     public float LatticeSensitivity=0.005f;
@@ -31,6 +33,7 @@ public class TargetController : MonoBehaviour
     [Header("EdgeCutParameters")]
     
     public bool isStatic = true;
+
     void Start()
     {
         // if the object dont have Outline script

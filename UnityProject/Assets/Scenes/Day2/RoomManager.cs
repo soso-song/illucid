@@ -16,9 +16,13 @@ public class RoomManager : MonoBehaviour
     public GoalTrigger GoalBTrigger;
     public Transform Passwall;
     public GameObject Key;
-    public float duration = 2.0f;
+    public float KeyBloomDuration = 3f;
 
-    public float lengthPasswallY = 9f;
+    // [Header("Level0Parameters")]
+
+    [Header("TreeLevelParameters")]
+    public float passWallDuration = 5f;
+    public float lengthPasswallY = 5f;
 
     public PostProcessVolume postProcessingVolume;
 
@@ -46,7 +50,7 @@ public class RoomManager : MonoBehaviour
         if (postProcessingVolume.profile.TryGetSettings(out bloom))
         {
             // Debug.Log("Bloom intensity: " + bloom.intensity.value);
-            StartCoroutine(setBloomIntensityAndThreshold(bloom, 3f, 40f, 0f));
+            StartCoroutine(setBloomIntensityAndThreshold(bloom, KeyBloomDuration, 40f, 0f));
         }
     }
     public IEnumerator setBloomIntensityAndThreshold(Bloom bloom, float duration, float bloomValue, float thresholdValue){
@@ -85,10 +89,10 @@ public class RoomManager : MonoBehaviour
         // print("startY: " + startY);
         // print("endY: " + endY);
         // move the wall up
-        while (elapsed < duration) {
+        while (elapsed < passWallDuration) {
             Passwall.position = new Vector3(
                 Passwall.position.x, 
-                Mathf.Lerp(startY, endY, elapsed / duration), 
+                Mathf.Lerp(startY, endY, elapsed / passWallDuration), 
                 Passwall.position.z
             );
             elapsed += Time.deltaTime;
@@ -104,10 +108,10 @@ public class RoomManager : MonoBehaviour
 
         // // move the wall down
         elapsed = 0f;
-        while (elapsed < duration) {
+        while (elapsed < passWallDuration) {
             Passwall.position = new Vector3(
                 Passwall.position.x, 
-                Mathf.Lerp(endY, startY, elapsed / duration), 
+                Mathf.Lerp(endY, startY, elapsed / passWallDuration), 
                 Passwall.position.z
             );
             elapsed += Time.deltaTime;
